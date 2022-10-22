@@ -10,7 +10,7 @@ add_library(Jarvis::Common ALIAS ${TARGET})
 set_target_properties(${TARGET}
     PROPERTIES
         OUTPUT_NAME jarvis-common
-        EXPORT_NAME jarvis-common
+        EXPORT_NAME Common
 )
 
 set_target_properties(${TARGET}
