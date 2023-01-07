@@ -20,8 +20,7 @@ build_image() {
   BUILD_CMD="docker build --tag ${DOCKER_IMAGE_NAME} \
   --build-arg UNAME=${USER_NAME} \
   --build-arg UID=${USER_UID} \
-  --build-arg UID=${USER_GID} \
-  --build-arg PULSE_SERVER="unix:${XDG_RUNTIME_DIR}/pulse/native" \
+  --build-arg GID=${USER_GID} \
   --file ${PROJECT_DIR}/Dockerfile ${PROJECT_DIR}
   "
 
@@ -38,10 +37,8 @@ run_image() {
   --rm \
   --user="${USER_UID}:${USER_GID}"
   --volume="${PROJECT_DIR}:${PROJECT_DIR}:rw" \
-  --volume="${XDG_RUNTIME_DIR}/pulse:${XDG_RUNTIME_DIR}/pulse" \
   --network=bridge \
   --workdir="${PROJECT_DIR}" \
-  --env PULSE_SERVER="unix:${XDG_RUNTIME_DIR}/pulse/native" \
   "${DOCKER_IMAGE_NAME}" /bin/bash)
 
   if [ -n "$(docker images -q ${DOCKER_IMAGE_NAME})" ]; then
