@@ -35,7 +35,8 @@ target_include_directories(${TARGET}
 )
 
 target_link_libraries(${TARGET}
-    PUBLIC Boost::headers Boost::program_options
+    PUBLIC Boost::headers
+           Boost::program_options
     PUBLIC spdlog::spdlog
 )
 
