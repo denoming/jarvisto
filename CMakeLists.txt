@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
 project(jarvis-common
-    VERSION 0.1.0
+    VERSION 0.1.1
     DESCRIPTION "J.A.R.V.I.S Common Library"
 )
 
