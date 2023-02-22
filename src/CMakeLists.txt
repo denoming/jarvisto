@@ -31,6 +31,8 @@ target_sources(${TARGET}
         src/Worker.cpp
         src/WorkerGroup.cpp
         src/Network.cpp
+        src/Cancellable.cpp
+        src/HttpRequest.cpp
 )
 
 target_include_directories(${TARGET}
