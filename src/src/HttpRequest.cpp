@@ -27,6 +27,7 @@ HttpRequest::ResultType
 HttpRequest::doGET(std::string_view host,
                    std::string_view port,
                    std::string_view path,
+                   const http::fields& fields,
                    SetterType&& setter)
 {
     assert(!host.empty());
@@ -40,6 +41,11 @@ HttpRequest::doGET(std::string_view host,
     _req.target(path);
     _req.set(http::field::host, host);
     _req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+
+    /* Set all custom fields to HTTP request */
+    std::for_each(fields.cbegin(), fields.cend(), [&](const http::fields::value_type& f) {
+        _req.set(f.name_string(), f.value());
+    });
 
     resolve(host, port);
 

@@ -26,9 +26,12 @@ public:
     pending() const;
 
     [[nodiscard]] ResultType
-    GET(std::string_view host, std::string_view port, std::string_view path)
+    GET(std::string_view host,
+        std::string_view port,
+        std::string_view path,
+        const http::fields& fields = {})
     {
-        return doGET(host, port, path, makeResultSetter<std::string>());
+        return doGET(host, port, path, fields, makeResultSetter<std::string>());
     }
 
     [[maybe_unused]] ResultType
@@ -36,18 +39,23 @@ public:
         std::string_view port,
         std::string_view path,
         std::invocable<const UnderlyingType&> auto&& onReady,
-        std::invocable<sys::error_code> auto&& onError)
+        std::invocable<sys::error_code> auto&& onError,
+        const http::fields& fields = {})
     {
         auto&& setter = makeResultSetter<UnderlyingType>(std::forward<decltype(onReady)>(onReady),
                                                          std::forward<decltype(onError)>(onError));
-        return doGET(host, port, path, std::move(setter));
+        return doGET(host, port, path, fields, std::move(setter));
     }
 
 private:
     HttpRequest(io::any_io_executor executor, ssl::context& context);
 
     [[nodiscard]] ResultType
-    doGET(std::string_view host, std::string_view port, std::string_view path, SetterType&& setter);
+    doGET(std::string_view host,
+          std::string_view port,
+          std::string_view path,
+          const http::fields& fields,
+          SetterType&& setter);
 
     void
     resolve(std::string_view host, std::string_view port);
