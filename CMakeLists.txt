@@ -10,3 +10,6 @@ include(cmake/ProjectConfigs.cmake)
 include(cmake/ProjectInstall.cmake)
 
 add_subdirectory(src)
+if(JARVIS_ENABLE_TESTS)
+    add_subdirectory(test)
+endif()

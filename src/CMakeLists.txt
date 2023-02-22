@@ -27,6 +27,10 @@ target_sources(${TARGET}
         src/Subsystem.cpp
         src/Application.cpp
         src/LoggerInitializer.cpp
+        src/SecureContext.cpp
+        src/Worker.cpp
+        src/WorkerGroup.cpp
+        src/Network.cpp
 )
 
 target_include_directories(${TARGET}
@@ -35,9 +39,11 @@ target_include_directories(${TARGET}
 )
 
 target_link_libraries(${TARGET}
-    PUBLIC Boost::headers
-           Boost::program_options
     PUBLIC spdlog::spdlog
+           Boost::headers
+           Boost::program_options
+           OpenSSL::SSL
+           OpenSSL::Crypto
 )
 
 target_compile_features(${TARGET} PUBLIC cxx_std_20)
