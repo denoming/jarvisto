@@ -6,6 +6,7 @@ target_sources(${TARGET}
     PRIVATE src/WorkerTest.cpp
             src/WorkerGroupTest.cpp
             src/AsyncResultTest.cpp
+            src/HttpRequestTest.cpp
 )
 
 target_link_libraries(${TARGET}

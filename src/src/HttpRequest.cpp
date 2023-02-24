@@ -24,22 +24,16 @@ HttpRequest::pending() const
 }
 
 HttpRequest::ResultType
-HttpRequest::doGET(std::string_view host,
-                   std::string_view port,
-                   std::string_view path,
-                   const http::fields& fields,
-                   SetterType&& setter)
+HttpRequest::doGET(const urls::url& url, const http::fields& fields, SetterType&& setter)
 {
-    assert(!host.empty());
-    assert(!port.empty());
-    assert(!path.empty());
+    assert(!url.empty());
 
     _setter = std::move(setter);
 
     _req.version(net::kHttpVersion11);
     _req.method(http::verb::get);
-    _req.target(path);
-    _req.set(http::field::host, host);
+    _req.target(url.encoded_resource());
+    _req.set(http::field::host, url.encoded_host());
     _req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
     /* Set all custom fields to HTTP request */
@@ -47,7 +41,7 @@ HttpRequest::doGET(std::string_view host,
         _req.set(f.name_string(), f.value());
     });
 
-    resolve(host, port);
+    resolve(url.encoded_host(), url.has_port() ? url.port() : "https");
 
     return _setter.getResult();
 }
@@ -55,6 +49,8 @@ HttpRequest::doGET(std::string_view host,
 void
 HttpRequest::resolve(std::string_view host, std::string_view port)
 {
+    LOGD("Resolve given host address: <{}:{}>", host, port);
+
     _resolver.async_resolve(
         host,
         port,
@@ -66,15 +62,13 @@ HttpRequest::resolve(std::string_view host, std::string_view port)
 void
 HttpRequest::onResolveDone(sys::error_code error, const tcp::resolver::results_type& endpoints)
 {
-    LOGD("Resolve given host address: <{}:{}>", host, port);
+    LOGD("Resolve address was successful: <{}>", endpoints.size());
 
     if (error) {
         LOGE("Failed to resolve address: <{}>", error.message());
         _setter.setError(error);
         return;
     }
-
-    LOGD("Resolve address was successful: <{}>", result.size());
 
     if (cancelled()) {
         LOGD("Operation was interrupted");

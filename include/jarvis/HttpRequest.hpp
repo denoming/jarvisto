@@ -26,36 +26,27 @@ public:
     pending() const;
 
     [[nodiscard]] ResultType
-    GET(std::string_view host,
-        std::string_view port,
-        std::string_view path,
-        const http::fields& fields = {})
+    GET(const urls::url& url, const http::fields& fields = {})
     {
-        return doGET(host, port, path, fields, makeResultSetter<std::string>());
+        return doGET(url, fields, makeResultSetter<std::string>());
     }
 
     [[maybe_unused]] ResultType
-    GET(std::string_view host,
-        std::string_view port,
-        std::string_view path,
+    GET(const urls::url& url,
         std::invocable<const UnderlyingType&> auto&& onReady,
         std::invocable<sys::error_code> auto&& onError,
         const http::fields& fields = {})
     {
         auto&& setter = makeResultSetter<UnderlyingType>(std::forward<decltype(onReady)>(onReady),
                                                          std::forward<decltype(onError)>(onError));
-        return doGET(host, port, path, fields, std::move(setter));
+        return doGET(url, fields, std::move(setter));
     }
 
 private:
     HttpRequest(io::any_io_executor executor, ssl::context& context);
 
     [[nodiscard]] ResultType
-    doGET(std::string_view host,
-          std::string_view port,
-          std::string_view path,
-          const http::fields& fields,
-          SetterType&& setter);
+    doGET(const urls::url& url, const http::fields& fields, SetterType&& setter);
 
     void
     resolve(std::string_view host, std::string_view port);

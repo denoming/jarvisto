@@ -44,6 +44,7 @@ target_link_libraries(${TARGET}
     PUBLIC spdlog::spdlog
            Boost::headers
            Boost::program_options
+           Boost::url
            OpenSSL::SSL
            OpenSSL::Crypto
 )

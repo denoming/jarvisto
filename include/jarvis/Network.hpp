@@ -5,6 +5,7 @@
 #include <boost/beast/http.hpp>
 #include <boost/beast/ssl.hpp>
 #include <boost/beast/version.hpp>
+#include <boost/url.hpp>
 
 #include <chrono>
 
@@ -13,6 +14,8 @@ namespace sys = boost::system;
 namespace http = beast::http;
 namespace io = boost::asio;
 namespace ssl = boost::asio::ssl;
+namespace urls = boost::urls;
+
 using tcp = boost::asio::ip::tcp;
 
 namespace jar::net {
