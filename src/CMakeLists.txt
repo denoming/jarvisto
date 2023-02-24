@@ -51,6 +51,10 @@ target_link_libraries(${TARGET}
 
 target_compile_features(${TARGET} PUBLIC cxx_std_20)
 
+target_compile_definitions(${TARGET}
+    PUBLIC SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG
+)
+
 # Generate export header file with export macros
 generate_export_header(${TARGET}
     BASE_NAME JARC
