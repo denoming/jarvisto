@@ -62,8 +62,6 @@ HttpRequest::resolve(std::string_view host, std::string_view port)
 void
 HttpRequest::onResolveDone(sys::error_code error, const tcp::resolver::results_type& endpoints)
 {
-    LOGD("Resolve address was successful: <{}>", endpoints.size());
-
     if (error) {
         LOGE("Failed to resolve address: <{}>", error.message());
         _setter.setError(error);
@@ -74,6 +72,7 @@ HttpRequest::onResolveDone(sys::error_code error, const tcp::resolver::results_t
         LOGD("Operation was interrupted");
         _setter.setError(sys::errc::make_error_code(sys::errc::operation_canceled));
     } else {
+        LOGD("Resolve address was successful: <{}>", endpoints.size());
         connect(endpoints);
     }
 }
@@ -96,20 +95,17 @@ void
 HttpRequest::onConnectDone(sys::error_code error,
                            const tcp::resolver::results_type::endpoint_type& endpoint)
 {
-    boost::ignore_unused(endpoint);
-
     if (error) {
         LOGE("Failed to connect: <{}>", error.message());
         _setter.setError(error);
         return;
     }
 
-    LOGD("Connecting to host <{}> address was done", endpoint.address().to_string());
-
     if (cancelled()) {
         LOGD("Operation was interrupted");
         _setter.setError(sys::errc::make_error_code(sys::errc::operation_canceled));
     } else {
+        LOGD("Connecting to host <{}> address was done", endpoint.address().to_string());
         handshake();
     }
 }
@@ -137,12 +133,11 @@ HttpRequest::onHandshakeDone(sys::error_code error)
         return;
     }
 
-    LOGD("Handshake was successful");
-
     if (cancelled()) {
         LOGD("Operation was interrupted");
         _setter.setError(sys::errc::make_error_code(sys::errc::operation_canceled));
     } else {
+        LOGD("Handshake was successful");
         write();
     }
 }
@@ -164,20 +159,17 @@ HttpRequest::write()
 void
 HttpRequest::onWriteDone(sys::error_code error, std::size_t bytes)
 {
-    boost::ignore_unused(bytes);
-
     if (error) {
         LOGE("Failed to write request: <{}>", error.what());
         _setter.setError(error);
         return;
     }
 
-    LOGD("Writing of request was successful: <{}> bytes", bytes);
-
     if (cancelled()) {
         LOGD("Operation was interrupted");
         _setter.setError(sys::errc::make_error_code(sys::errc::operation_canceled));
     } else {
+        LOGD("Writing of request was successful: <{}> bytes", bytes);
         read();
     }
 }
@@ -200,8 +192,6 @@ HttpRequest::read()
 void
 HttpRequest::onReadDone(sys::error_code error, std::size_t bytes)
 {
-    boost::ignore_unused(bytes);
-
     if (error) {
         LOGE("Failed to read response: <{}>", error.what());
         _setter.setError(error);
