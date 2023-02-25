@@ -1,5 +1,7 @@
 #pragma once
 
+#include "jarvis/Export.hpp"
+
 #include <boost/asio.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
@@ -27,12 +29,12 @@ static constexpr auto kHttpVersion11 = uint32_t{11u};
 /* HTTP default requests timeout */
 static constexpr auto kHttpDefaultTimeout = std::chrono::seconds{30};
 
-bool
+JARC_EXPORT bool
 setTlsHostName(beast::ssl_stream<beast::tcp_stream>& stream,
                std::string_view hostname,
                sys::error_code& error);
 
-void
+JARC_EXPORT void
 resetTimeout(beast::ssl_stream<beast::tcp_stream>& stream,
              std::chrono::seconds timeout = std::chrono::seconds{kHttpDefaultTimeout});
 
