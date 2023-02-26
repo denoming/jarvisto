@@ -33,6 +33,7 @@ target_sources(${TARGET}
         src/Network.cpp
         src/Cancellable.cpp
         src/HttpRequest.cpp
+        src/Utils.cpp
 )
 
 target_include_directories(${TARGET}
