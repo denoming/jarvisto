@@ -2,6 +2,8 @@
 
 #include <spdlog/spdlog.h>
 
+#include <fmt/std.h>
+
 // clang-format off
 #define LOGD(...) \
     SPDLOG_DEBUG(__VA_ARGS__)
