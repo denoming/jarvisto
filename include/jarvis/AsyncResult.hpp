@@ -67,14 +67,14 @@ public:
         return std::get<2>(_future.get());
     }
 
-    [[nodiscard]] sys::error_code
+    [[nodiscard]] std::error_code
     error() const
     {
         return std::get<1>(_future.get());
     }
 
 private:
-    using Result = std::variant<sys::error_code, T>;
+    using Result = std::variant<std::error_code, T>;
 
     template<typename U>
     friend class AsyncResultSetter;
@@ -92,14 +92,14 @@ template<typename T>
 class AsyncResultSetter {
 public:
     using OnReady = void(const T& value);
-    using OnError = void(sys::error_code error);
+    using OnError = void(std::error_code error);
 
     AsyncResultSetter()
         : _future{_result.get_future()}
     {
     }
 
-    template<std::invocable<const T&> C1, std::invocable<sys::error_code> C2>
+    template<std::invocable<const T&> C1, std::invocable<std::error_code> C2>
     AsyncResultSetter(C1&& readyCallback, C2&& errorCallback)
         : _future{_result.get_future()}
         , _onReady{std::forward<C1>(readyCallback)}
@@ -144,7 +144,7 @@ public:
     }
 
     void
-    setError(sys::error_code input)
+    setError(std::error_code input)
     {
         if (dirty()) {
             throw std::logic_error{"Already has value"};
@@ -181,7 +181,7 @@ public:
     }
 
 private:
-    using Result = std::variant<sys::error_code, T>;
+    using Result = std::variant<std::error_code, T>;
     std::function<OnReady> _onReady;
     std::function<OnError> _onError;
     std::promise<Result> _result;
@@ -198,7 +198,7 @@ makeResultSetter()
 template<typename T>
 auto
 makeResultSetter(std::invocable<const T&> auto&& onReady,
-                 std::invocable<sys::error_code> auto&& onError)
+                 std::invocable<std::error_code> auto&& onError)
 {
     return AsyncResultSetter<T>(std::forward<decltype(onReady)>(onReady),
                                 std::forward<decltype(onError)>(onError));

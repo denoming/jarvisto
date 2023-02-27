@@ -14,7 +14,9 @@ using namespace std::literals;
 
 class HttpRequestTest : public Test {
 public:
-    const urls::url kUrl{"<PUT-ADDRESS-HERE>"};
+    const urls::url kUrl{
+        "https://api.waqi.info/feed/A252832/?token=e971e6bb50fff16c97de289eb50cb69952413a04"
+    };
 
     HttpRequestTest()
         : request{HttpRequest::create(io::make_strand(worker.executor()), context.ref())}
@@ -39,7 +41,7 @@ public:
     HttpRequest::Ptr request;
 };
 
-TEST_F(HttpRequestTest, DISABLED_GET)
+TEST_F(HttpRequestTest, GET)
 {
     MockFunction<HttpRequest::SetterType::OnReady> onReady;
     MockFunction<HttpRequest::SetterType::OnError> onError;

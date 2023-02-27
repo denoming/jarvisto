@@ -60,7 +60,7 @@ HttpRequest::resolve(std::string_view host, std::string_view port)
 }
 
 void
-HttpRequest::onResolveDone(sys::error_code error, const tcp::resolver::results_type& endpoints)
+HttpRequest::onResolveDone(std::error_code error, const tcp::resolver::results_type& endpoints)
 {
     if (error) {
         LOGE("Failed to resolve address: <{}>", error.message());
@@ -92,7 +92,7 @@ HttpRequest::connect(const tcp::resolver::results_type& endpoints)
 }
 
 void
-HttpRequest::onConnectDone(sys::error_code error,
+HttpRequest::onConnectDone(std::error_code error,
                            const tcp::resolver::results_type::endpoint_type& endpoint)
 {
     if (error) {
@@ -125,7 +125,7 @@ HttpRequest::handshake()
 }
 
 void
-HttpRequest::onHandshakeDone(sys::error_code error)
+HttpRequest::onHandshakeDone(std::error_code error)
 {
     if (error) {
         LOGE("Failed to handshake: <{}>", error.message());
@@ -157,10 +157,10 @@ HttpRequest::write()
 }
 
 void
-HttpRequest::onWriteDone(sys::error_code error, std::size_t bytes)
+HttpRequest::onWriteDone(std::error_code error, std::size_t bytes)
 {
     if (error) {
-        LOGE("Failed to write request: <{}>", error.what());
+        LOGE("Failed to write request: <{}>", error.message());
         _setter.setError(error);
         return;
     }
@@ -190,10 +190,10 @@ HttpRequest::read()
 }
 
 void
-HttpRequest::onReadDone(sys::error_code error, std::size_t bytes)
+HttpRequest::onReadDone(std::error_code error, std::size_t bytes)
 {
     if (error) {
-        LOGE("Failed to read response: <{}>", error.what());
+        LOGE("Failed to read response: <{}>", error.message());
         _setter.setError(error);
         return;
     }
@@ -221,19 +221,20 @@ HttpRequest::shutdown()
 }
 
 void
-HttpRequest::onShutdownDone(sys::error_code error)
+HttpRequest::onShutdownDone(std::error_code error)
 {
-    if (error == io::error::eof || error == io::error::operation_aborted) {
+    if (error == io::error::make_error_code(io::error::eof)) {
         error = {};
     }
-
-    if (error == ssl::error::stream_truncated) {
-        LOGD("Stream was truncated");
+    if (error == io::error::make_error_code(io::error::operation_aborted)) {
+        error = {};
+    }
+    if (error == ssl::error::make_error_code(ssl::error::stream_truncated)) {
         error = {};
     }
 
     if (error) {
-        LOGE("Failed to shutdown connection: <{}>", error.what());
+        LOGE("Failed to shutdown connection: <{}>", error.message());
     } else {
         LOGD("Shutdown of connection was successful");
     }

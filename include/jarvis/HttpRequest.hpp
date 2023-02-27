@@ -34,7 +34,7 @@ public:
     [[maybe_unused]] ResultType
     GET(const urls::url& url,
         std::invocable<const UnderlyingType&> auto&& onReady,
-        std::invocable<sys::error_code> auto&& onError,
+        std::invocable<std::error_code> auto&& onError,
         const http::fields& fields = {})
     {
         auto&& setter = makeResultSetter<UnderlyingType>(std::forward<decltype(onReady)>(onReady),
@@ -52,38 +52,38 @@ private:
     resolve(std::string_view host, std::string_view port);
 
     void
-    onResolveDone(sys::error_code error, const tcp::resolver::results_type& endpoints);
+    onResolveDone(std::error_code error, const tcp::resolver::results_type& endpoints);
 
     void
     connect(const tcp::resolver::results_type& endpoints);
 
     void
-    onConnectDone(sys::error_code error,
+    onConnectDone(std::error_code error,
                   const tcp::resolver::results_type::endpoint_type& endpoint);
 
     void
     handshake();
 
     void
-    onHandshakeDone(sys::error_code error);
+    onHandshakeDone(std::error_code error);
 
     void
     write();
 
     void
-    onWriteDone(sys::error_code error, std::size_t bytes);
+    onWriteDone(std::error_code error, std::size_t bytes);
 
     void
     read();
 
     void
-    onReadDone(sys::error_code error, std::size_t bytes);
+    onReadDone(std::error_code error, std::size_t bytes);
 
     void
     shutdown();
 
     void
-    onShutdownDone(sys::error_code error);
+    onShutdownDone(std::error_code error);
 
 private:
     SetterType _setter;
