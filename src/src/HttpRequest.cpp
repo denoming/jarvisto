@@ -30,6 +30,17 @@ HttpRequest::doGET(const urls::url& url, const http::fields& fields, SetterType&
 
     _setter = std::move(setter);
 
+    std::error_code error;
+    net::setServerHostname(_stream, url.host(), error);
+    if (error) {
+        LOGW("Unable to set server to use in verification process");
+        error = {};
+    }
+    net::setSniHostname(_stream, url.host(), error);
+    if (error) {
+        LOGW("Unable to set SNI hostname");
+    }
+
     _req.version(net::kHttpVersion11);
     _req.method(http::verb::get);
     _req.target(url.encoded_resource());
@@ -128,7 +139,7 @@ void
 HttpRequest::onHandshakeDone(std::error_code error)
 {
     if (error) {
-        LOGE("Failed to handshake: <{}>", error.message());
+        LOGE(" >>> Failed to handshake <<<: <{}>", error.message());
         _setter.setError(error);
         return;
     }

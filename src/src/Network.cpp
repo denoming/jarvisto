@@ -2,19 +2,30 @@
 
 namespace jar::net {
 
-bool
-setTlsHostName(beast::ssl_stream<beast::tcp_stream>& stream,
-               std::string_view hostname,
-               sys::error_code& error)
+void
+setServerHostname(beast::ssl_stream<beast::tcp_stream>& stream,
+                  std::string_view hostname,
+                  std::error_code& error)
 {
-    // Set SNI Hostname (many hosts need this to handshake successfully)
+    auto* param = ::SSL_get0_param(stream.native_handle());
+    ::X509_VERIFY_PARAM_set_hostflags(param, X509_CHECK_FLAG_NO_PARTIAL_WILDCARDS);
+    if (X509_VERIFY_PARAM_set1_host(param, hostname.data(), hostname.size())) {
+        error = {};
+    } else {
+        error = sys::error_code{static_cast<int>(::ERR_get_error()), io::error::get_ssl_category()};
+    }
+}
+
+void
+setSniHostname(beast::ssl_stream<beast::tcp_stream>& stream,
+               std::string_view hostname,
+               std::error_code& error)
+{
     if (SSL_set_tlsext_host_name(stream.native_handle(), hostname.data())) {
         error = {};
     } else {
-        error
-            = sys::error_code{static_cast<int>(::ERR_get_error()), io::error::get_ssl_category()};
+        error = sys::error_code{static_cast<int>(::ERR_get_error()), io::error::get_ssl_category()};
     }
-    return !error;
 }
 
 void
@@ -23,4 +34,4 @@ resetTimeout(beast::ssl_stream<beast::tcp_stream>& stream, std::chrono::seconds 
     beast::get_lowest_layer(stream).expires_after(timeout);
 }
 
-} // namespace jar
+} // namespace jar::net

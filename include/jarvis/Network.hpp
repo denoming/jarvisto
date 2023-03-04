@@ -29,11 +29,33 @@ static constexpr auto kHttpVersion11 = uint32_t{11u};
 /* HTTP default requests timeout */
 static constexpr auto kHttpDefaultTimeout = std::chrono::seconds{30};
 
-JARC_EXPORT bool
-setTlsHostName(beast::ssl_stream<beast::tcp_stream>& stream,
-               std::string_view hostname,
-               sys::error_code& error);
+/**
+ * Sets the expected server hostname, which will be checked during the verification process
+ * @param stream - the TCP stream
+ * @param hostname - the hostname
+ * @param error - the error code in case of unsuccessful
+ */
+JARC_EXPORT void
+setServerHostname(beast::ssl_stream<beast::tcp_stream>& stream,
+                  std::string_view hostname,
+                  std::error_code& error);
 
+/**
+ * Sets the provided SNI hostname on the provided stream
+ * @param stream - the TCP stream
+ * @param hostname - the hostname
+ * @param error - the error code in case of unsuccessful
+ */
+JARC_EXPORT void
+setSniHostname(beast::ssl_stream<beast::tcp_stream>& stream,
+               std::string_view hostname,
+               std::error_code& error);
+
+/**
+ * Reset timeout of any operation
+ * @param stream - the TCP stream
+ * @param timeout - the timeout of operation
+ */
 JARC_EXPORT void
 resetTimeout(beast::ssl_stream<beast::tcp_stream>& stream,
              std::chrono::seconds timeout = std::chrono::seconds{kHttpDefaultTimeout});
