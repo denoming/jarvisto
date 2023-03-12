@@ -45,7 +45,9 @@ TEST(AsyncResultTest, Submit)
     EXPECT_FALSE(r3.ready());
     s3.emplaceValue(0, "Value");
     EXPECT_TRUE(r3.ready());
+    EXPECT_TRUE(r3.hasValue());
     EXPECT_THAT(r3.value(), matchTo(Data{0, "Value"}));
+    EXPECT_FALSE(r3.hasError());
     EXPECT_ANY_THROW({ auto error = r3.error(); });
 }
 

@@ -55,6 +55,18 @@ public:
         return details::ready(_future);
     }
 
+    [[nodiscard]] bool
+    hasValue() const
+    {
+        return std::holds_alternative<T>(_future.get());
+    }
+
+    [[nodiscard]] bool
+    hasError() const
+    {
+        return std::holds_alternative<std::error_code>(_future.get());
+    }
+
     void
     wait()
     {
@@ -64,13 +76,13 @@ public:
     [[nodiscard]] const T&
     value() const
     {
-        return std::get<1>(_future.get());
+        return std::get<T>(_future.get());
     }
 
     [[nodiscard]] std::error_code
     error() const
     {
-        return std::get<0>(_future.get());
+        return std::get<std::error_code>(_future.get());
     }
 
 private:
