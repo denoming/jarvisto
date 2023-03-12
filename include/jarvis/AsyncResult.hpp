@@ -64,13 +64,13 @@ public:
     [[nodiscard]] const T&
     value() const
     {
-        return std::get<2>(_future.get());
+        return std::get<1>(_future.get());
     }
 
     [[nodiscard]] std::error_code
     error() const
     {
-        return std::get<1>(_future.get());
+        return std::get<0>(_future.get());
     }
 
 private:
@@ -120,12 +120,12 @@ public:
             throw std::logic_error{"Already has value"};
         }
 
-        Result result{std::in_place_index<1>, input};
-        if (_onReady) {
-            _onReady(std::get<1>(result));
-        }
+        _result.set_value(Result{std::in_place_index<1>, input});
 
-        _result.set_value(std::move(result));
+        if (_onReady) {
+            auto r = getResult();
+            _onReady(r.value());
+        }
     }
 
     void
@@ -135,12 +135,12 @@ public:
             throw std::logic_error{"Already has value"};
         }
 
-        Result result{std::in_place_index<1>, std::move(input)};
-        if (_onReady) {
-            _onReady(std::get<1>(result));
-        }
+        _result.set_value(Result{std::in_place_index<1>, std::move(input)});
 
-        _result.set_value(std::move(result));
+        if (_onReady) {
+            auto r = getResult();
+            _onReady(r.value());
+        }
     }
 
     void
@@ -150,12 +150,12 @@ public:
             throw std::logic_error{"Already has value"};
         }
 
-        Result result{std::in_place_index<0>, input};
-        if (_onError) {
-            _onError(std::get<0>(result));
-        }
+        _result.set_value(Result{std::in_place_index<0>, input});
 
-        _result.set_value(std::move(result));
+        if (_onError) {
+            auto r = getResult();
+            _onError(r.error());
+        }
     }
 
     template<typename... Args>
@@ -166,12 +166,12 @@ public:
             throw std::logic_error{"Already has value"};
         }
 
-        Result result{std::in_place_index<1>, std::forward<Args>(args)...};
-        if (_onReady) {
-            _onReady(std::get<1>(result));
-        }
+        _result.set_value(Result{std::in_place_index<1>, std::forward<Args>(args)...});
 
-        _result.set_value(std::move(result));
+        if (_onReady) {
+            auto r = getResult();
+            _onReady(r.value());
+        }
     }
 
     AsyncResult<T>

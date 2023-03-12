@@ -9,10 +9,21 @@ using namespace jar;
 using namespace testing;
 
 struct Data {
-    Data(int v1, const std::string& v2)
+    Data(int v1, std::string v2)
+        : v1{v1}
+        , v2{std::move(v2)}
     {
     }
+
+    int v1;
+    std::string v2;
 };
+
+static Matcher<Data>
+matchTo(const Data& data)
+{
+    return AllOf(Field(&Data::v1, data.v1), Field(&Data::v2, data.v2));
+}
 
 TEST(AsyncResultTest, Submit)
 {
@@ -34,6 +45,8 @@ TEST(AsyncResultTest, Submit)
     EXPECT_FALSE(r3.ready());
     s3.emplaceValue(0, "Value");
     EXPECT_TRUE(r3.ready());
+    EXPECT_THAT(r3.value(), matchTo(Data{0, "Value"}));
+    EXPECT_ANY_THROW({ auto error = r3.error(); });
 }
 
 TEST(AsyncResultTest, Callback)
