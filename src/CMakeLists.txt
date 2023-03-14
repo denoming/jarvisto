@@ -119,7 +119,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jarvis/Export.hpp
 
 # Generate package config and version file
 configure_package_config_file(
-    ${PROJECT_SOURCE_DIR}/config/JarvisCommonConfig.cmake.in
+    ${PROJECT_SOURCE_DIR}/config/cmake/JarvisCommonConfig.cmake.in
     JarvisCommonConfig.cmake
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/JarvisCommon
     NO_SET_AND_CHECK_MACRO
