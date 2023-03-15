@@ -1,5 +1,10 @@
 #include "jarvis/LoggerInitializer.hpp"
 
+#include "jarvis/Options.hpp"
+#ifdef JARVIS_ENABLE_DLT
+#include "common/LoggerDltSink.hpp"
+#endif
+
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/pattern_formatter.h>
@@ -9,7 +14,7 @@
 
 namespace fs = std::filesystem;
 
-class ShotFilenameAndLine : public spdlog::custom_flag_formatter {
+class ShortFilenameAndLine : public spdlog::custom_flag_formatter {
 public:
     void
     format(const spdlog::details::log_msg& msg,
@@ -32,25 +37,69 @@ public:
     [[nodiscard]] std::unique_ptr<custom_flag_formatter>
     clone() const override
     {
-        return spdlog::details::make_unique<ShotFilenameAndLine>();
+        return spdlog::details::make_unique<ShortFilenameAndLine>();
     }
 };
 
 namespace jar {
 
+namespace {
+
+void
+addConsoleSink()
+{
+    static constexpr const char* kFormat{"[%Y-%m-%d %H:%M:%S.%e] [%P:%t] [%L] %-80!v [%*]"};
+    auto formatter = std::make_unique<spdlog::pattern_formatter>();
+    formatter->add_flag<ShortFilenameAndLine>('*').set_pattern(kFormat);
+
+    const auto sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    sink->set_level(spdlog::level::debug);
+    sink->set_formatter(std::move(formatter));
+    spdlog::default_logger()->sinks().push_back(sink);
+}
+
+#ifdef JARVIS_ENABLE_DLT
+void
+addDltSink(const char* ctxId, const char* ctxDesc)
+{
+    static constexpr const char* kFormat{"[%P:%t] [%L] [%*] %-80!v"};
+    auto formatter = std::make_unique<spdlog::pattern_formatter>();
+    formatter->add_flag<ShortFilenameAndLine>('*').set_pattern(kFormat);
+
+    const auto sink = std::make_shared<LoggerDltSink>(ctxId, ctxDesc);
+    sink->set_formatter(std::move(formatter));
+    spdlog::default_logger()->sinks().push_back(sink);
+}
+#endif
+
+} // namespace
+
+LoggerInitializer&
+LoggerInitializer::instance()
+{
+    static LoggerInitializer instance;
+    return instance;
+}
+
 void
 LoggerInitializer::initialize()
 {
-    static constexpr const char* kFormat{"[%Y-%m-%d %H:%M:%S.%e] [%P:%t] [%L] %-80!v [%*]"};
+    if (!_initialized) {
+        addConsoleSink();
+        _initialized = true;
+    }
+}
 
-    auto formatter = std::make_unique<spdlog::pattern_formatter>();
-    formatter->add_flag<ShotFilenameAndLine>('*').set_pattern(kFormat);
-
-    auto logger = spdlog::stdout_color_mt("MAIN");
-    assert(logger);
-    logger->set_level(spdlog::level::debug);
-    logger->set_formatter(std::move(formatter));
-    spdlog::set_default_logger(logger);
+void
+LoggerInitializer::initialize(const char* ctxId, const char* ctxDesc)
+{
+    if (!_initialized) {
+        addConsoleSink();
+#ifdef JARVIS_ENABLE_DLT
+        addDltSink(ctxId, ctxDesc);
+#endif
+        _initialized = true;
+    }
 }
 
 } // namespace jar

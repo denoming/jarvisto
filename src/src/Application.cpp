@@ -42,7 +42,7 @@ Application::parseArgs(int argc, char* argv[])
 int
 Application::run()
 {
-    LoggerInitializer::initialize();
+    LoggerInitializer::instance().initialize(contextId(), contextDesc());
 
     if (_helpRequested) {
         return EXIT_SUCCESS;
@@ -130,6 +130,7 @@ Application::processOptions(int argc, char* argv[])
     po::options_description d{"Options"};
     defineOptions(d);
     po::store(po::parse_command_line(argc, argv, d), _options);
+    po::notify(_options);
     if (_options.contains("help")) {
         handleHelp(d);
     }

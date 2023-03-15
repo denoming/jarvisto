@@ -38,7 +38,8 @@ target_sources(${TARGET}
 
 target_include_directories(${TARGET}
     PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-           $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_RUNTIME_OUTPUT_DIRECTORY}>
 )
 
 target_link_libraries(${TARGET}
@@ -49,6 +50,11 @@ target_link_libraries(${TARGET}
            OpenSSL::SSL
            OpenSSL::Crypto
 )
+
+if (JARVIS_ENABLE_DLT)
+    target_sources(${TARGET} PRIVATE src/LoggerDltSink.cpp)
+    target_link_libraries(${TARGET} PRIVATE PkgConfig::Dlt)
+endif()
 
 target_compile_features(${TARGET} PUBLIC cxx_std_20)
 

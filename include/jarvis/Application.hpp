@@ -30,6 +30,18 @@ public:
 protected:
     Application();
 
+    virtual const char*
+    contextId()
+        = 0;
+
+    virtual const char*
+    contextDesc()
+        = 0;
+
+    virtual void
+    proceed()
+        = 0;
+
     virtual void
     defineOptions(po::options_description& description);
 
@@ -50,10 +62,6 @@ protected:
 
     void
     finalize() override;
-
-    virtual void
-    proceed()
-        = 0;
 
 private:
     void
