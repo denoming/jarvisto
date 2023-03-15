@@ -21,7 +21,7 @@ public:
            const std::tm&,
            spdlog::memory_buf_t& buffer) override
     {
-        static constexpr const char* kFullFormat{"{:.<35}"};
+        static constexpr const char* kFullFormat{"{:.<30}"};
         static constexpr const char* kNullFormat{"{:^5}"};
 
         if (msg.source.empty()) {
@@ -48,7 +48,7 @@ namespace {
 void
 addConsoleSink()
 {
-    static constexpr const char* kFormat{"[%Y-%m-%d %H:%M:%S.%e] [%P:%t] [%L] %-80!v [%*]"};
+    static constexpr const char* kFormat{"[%Y-%m-%d %H:%M:%S.%e] [%P:%t] [%L] [%*] %-100!v"};
     auto formatter = std::make_unique<spdlog::pattern_formatter>();
     formatter->add_flag<ShortFilenameAndLine>('*').set_pattern(kFormat);
 
@@ -62,7 +62,7 @@ addConsoleSink()
 void
 addDltSink(const char* ctxId, const char* ctxDesc)
 {
-    static constexpr const char* kFormat{"[%P:%t] [%L] [%*] %-80!v"};
+    static constexpr const char* kFormat{"[%P:%t] [%L] [%*] %v"};
     auto formatter = std::make_unique<spdlog::pattern_formatter>();
     formatter->add_flag<ShortFilenameAndLine>('*').set_pattern(kFormat);
 
