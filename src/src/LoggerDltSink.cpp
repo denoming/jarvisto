@@ -64,8 +64,20 @@ LoggerDltSink::~LoggerDltSink()
 void
 LoggerDltSink::sink_it_(const spdlog::details::log_msg& msg)
 {
+    static const std::size_t kMessageMaxLength{1000};
+
     const std::string formatted{format(msg)};
-    DLT_LOG_STRING(_ctx, toLogLevel(msg.level), formatted.data());
+    if (formatted.size() > kMessageMaxLength) {
+        const auto level{toLogLevel(msg.level)};
+        DLT_LOG_STRING(_ctx, level, "--- BEGIN ---");
+        for (std::size_t n{0}; n < formatted.size(); n += kMessageMaxLength) {
+            auto str = formatted.substr(n, kMessageMaxLength);
+            DLT_LOG_STRING(_ctx, level, str.data());
+        }
+        DLT_LOG_STRING(_ctx, level, "--- END ---");
+    } else {
+        DLT_LOG_STRING(_ctx, toLogLevel(msg.level), formatted.data());
+    }
 }
 
 void
