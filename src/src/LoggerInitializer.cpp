@@ -94,6 +94,7 @@ void
 LoggerInitializer::initialize(const char* ctxId, const char* ctxDesc)
 {
     if (!_initialized) {
+        spdlog::set_default_logger(std::make_shared<spdlog::logger>("MAIN"));
         addConsoleSink();
 #ifdef JARVIS_ENABLE_DLT
         addDltSink(ctxId, ctxDesc);
