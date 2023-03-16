@@ -39,8 +39,7 @@ protected:
         = 0;
 
     virtual void
-    proceed()
-        = 0;
+    proceed();
 
     virtual void
     defineOptions(po::options_description& description);

@@ -68,6 +68,14 @@ Application::options() const
 }
 
 void
+Application::proceed()
+{
+    if (!waitForTermination()) {
+        LOGE("Waiting for termination has failed");
+    }
+}
+
+void
 Application::defineOptions(po::options_description& description)
 {
     description.add_options()("help,h", "Display help");
@@ -78,8 +86,9 @@ Application::waitForTermination()
 {
     asio::io_context context;
     boost::asio::signal_set signals(context, SIGINT, SIGTERM);
-    signals.async_wait([&context](const auto& /*error*/, int /*signal*/) {
+    signals.async_wait([this, &context](const auto& /*error*/, int signal) {
         if (!context.stopped()) {
+            LOGD("Terminate <{}> application by <{}> signal", name(), signal);
             context.stop();
         }
     });
