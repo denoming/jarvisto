@@ -21,7 +21,7 @@ public:
            const std::tm&,
            spdlog::memory_buf_t& buffer) override
     {
-        static constexpr const char* kFullFormat{"{:.<30}"};
+        static constexpr const char* kFullFormat{"{:.<35}"};
         static constexpr const char* kNullFormat{"{:^5}"};
 
         if (msg.source.empty()) {
@@ -46,6 +46,14 @@ namespace jar {
 namespace {
 
 void
+setupDefaultLogger()
+{
+    auto logger = std::make_shared<spdlog::logger>("MAIN");
+    logger->set_level(spdlog::level::debug);
+    spdlog::set_default_logger(logger);
+}
+
+void
 addConsoleSink()
 {
     static constexpr const char* kFormat{"[%Y-%m-%d %H:%M:%S.%e] [%P:%t] [%L] [%*] %-100!v"};
@@ -67,6 +75,7 @@ addDltSink(const char* ctxId, const char* ctxDesc)
     formatter->add_flag<ShortFilenameAndLine>('*').set_pattern(kFormat);
 
     const auto sink = std::make_shared<LoggerDltSink>(ctxId, ctxDesc);
+    sink->set_level(spdlog::level::debug);
     sink->set_formatter(std::move(formatter));
     spdlog::default_logger()->sinks().push_back(sink);
 }
@@ -85,6 +94,7 @@ void
 LoggerInitializer::initialize()
 {
     if (!_initialized) {
+        setupDefaultLogger();
         addConsoleSink();
         _initialized = true;
     }
@@ -94,7 +104,7 @@ void
 LoggerInitializer::initialize(const char* ctxId, const char* ctxDesc)
 {
     if (!_initialized) {
-        spdlog::set_default_logger(std::make_shared<spdlog::logger>("MAIN"));
+        setupDefaultLogger();
         addConsoleSink();
 #ifdef JARVIS_ENABLE_DLT
         addDltSink(ctxId, ctxDesc);
