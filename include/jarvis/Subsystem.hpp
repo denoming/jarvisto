@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jarvis/Export.hpp"
+#include "jarvis/CommonExport.hpp"
 
 #include <memory>
 

@@ -39,6 +39,7 @@ target_sources(${TARGET}
 target_include_directories(${TARGET}
     PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
             $<BUILD_INTERFACE:${CMAKE_RUNTIME_OUTPUT_DIRECTORY}>
 )
 
@@ -65,7 +66,7 @@ target_compile_definitions(${TARGET}
 # Generate export header file with export macros
 generate_export_header(${TARGET}
     BASE_NAME JARC
-    EXPORT_FILE_NAME jarvis/Export.hpp
+    EXPORT_FILE_NAME jarvis/CommonExport.hpp
 )
 
 # Install target files except namelink file
@@ -118,7 +119,7 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
 )
 
 # Install export header file
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jarvis/Export.hpp
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jarvis/CommonExport.hpp
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/jarvis
     COMPONENT JarvisCommonDevelopment
 )

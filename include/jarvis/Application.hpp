@@ -1,7 +1,7 @@
 #pragma once
 
 #include "jarvis/Subsystem.hpp"
-#include "jarvis/Export.hpp"
+#include "jarvis/CommonExport.hpp"
 
 #include <boost/program_options.hpp>
 
