@@ -194,8 +194,8 @@ public:
 
 private:
     using Result = std::variant<std::error_code, T>;
-    std::function<OnReady> _onReady;
-    std::function<OnError> _onError;
+    std::move_only_function<OnReady> _onReady;
+    std::move_only_function<OnError> _onError;
     std::promise<Result> _result;
     std::shared_future<Result> _future;
 };
