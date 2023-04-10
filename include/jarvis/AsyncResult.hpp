@@ -1,14 +1,9 @@
 #pragma once
 
-#include <boost/system/error_code.hpp>
-
-#include <concepts>
 #include <functional>
 #include <future>
-#include <memory>
 #include <variant>
-
-namespace sys = boost::system;
+#include <system_error>
 
 namespace jar {
 
@@ -29,8 +24,6 @@ class AsyncResultSetter;
 template<typename T>
 class AsyncResult final {
 public:
-    using Setter = AsyncResultSetter<T>;
-
     AsyncResult() = default;
 
     AsyncResult(AsyncResult&&) noexcept = default;
@@ -111,11 +104,11 @@ public:
     {
     }
 
-    template<std::invocable<const T&> C1, std::invocable<std::error_code> C2>
-    AsyncResultSetter(C1&& readyCallback, C2&& errorCallback)
+    AsyncResultSetter(std::move_only_function<OnReady> onReady,
+                      std::move_only_function<OnError> onError)
         : _future{_result.get_future()}
-        , _onReady{std::forward<C1>(readyCallback)}
-        , _onError{std::forward<C2>(errorCallback)}
+        , _onReady{std::move(onReady)}
+        , _onError{std::move(onError)}
     {
     }
 
@@ -209,11 +202,10 @@ makeResultSetter()
 
 template<typename T>
 auto
-makeResultSetter(std::invocable<const T&> auto&& onReady,
-                 std::invocable<std::error_code> auto&& onError)
+makeResultSetter(std::move_only_function<typename AsyncResultSetter<T>::OnReady> onReady,
+                 std::move_only_function<typename AsyncResultSetter<T>::OnError> onError)
 {
-    return AsyncResultSetter<T>(std::forward<decltype(onReady)>(onReady),
-                                std::forward<decltype(onError)>(onError));
+    return AsyncResultSetter<T>(std::move(onReady), std::move(onError));
 }
 
 } // namespace jar

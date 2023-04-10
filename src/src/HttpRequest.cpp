@@ -24,6 +24,22 @@ HttpRequest::pending() const
 }
 
 HttpRequest::ResultType
+HttpRequest::GET(const urls::url& url, const http::fields& fields)
+{
+    return doGET(url, fields, makeResultSetter<std::string>());
+}
+
+HttpRequest::ResultType
+HttpRequest::GET(const urls::url& url,
+                 std::move_only_function<OnReady> onReady,
+                 std::move_only_function<OnError> onError,
+                 const http::fields& fields)
+{
+    auto&& setter = makeResultSetter<UnderlyingType>(std::move(onReady), std::move(onError));
+    return doGET(url, fields, std::move(setter));
+}
+
+HttpRequest::ResultType
 HttpRequest::doGET(const urls::url& url, const http::fields& fields, SetterType&& setter)
 {
     assert(!url.empty());

@@ -5,9 +5,10 @@
 #include "jarvis/Cancellable.hpp"
 #include "jarvis/Network.hpp"
 
-#include <concepts>
+#include <functional>
 #include <memory>
 #include <string_view>
+#include <system_error>
 
 namespace jar {
 
@@ -19,6 +20,9 @@ public:
     using ResultType = AsyncResult<UnderlyingType>;
     using Ptr = std::shared_ptr<HttpRequest>;
 
+    using OnReady = void(const UnderlyingType&);
+    using OnError = void(std::error_code);
+
     [[nodiscard]] static Ptr
     create(io::any_io_executor executor, ssl::context& context);
 
@@ -26,21 +30,13 @@ public:
     pending() const;
 
     [[nodiscard]] ResultType
-    GET(const urls::url& url, const http::fields& fields = {})
-    {
-        return doGET(url, fields, makeResultSetter<std::string>());
-    }
+    GET(const urls::url& url, const http::fields& fields = {});
 
     [[maybe_unused]] ResultType
     GET(const urls::url& url,
-        std::invocable<const UnderlyingType&> auto&& onReady,
-        std::invocable<std::error_code> auto&& onError,
-        const http::fields& fields = {})
-    {
-        auto&& setter = makeResultSetter<UnderlyingType>(std::forward<decltype(onReady)>(onReady),
-                                                         std::forward<decltype(onError)>(onError));
-        return doGET(url, fields, std::move(setter));
-    }
+        std::move_only_function<OnReady> onReady,
+        std::move_only_function<OnError> onError,
+        const http::fields& fields = {});
 
 private:
     HttpRequest(io::any_io_executor executor, ssl::context& context);
