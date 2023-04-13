@@ -18,12 +18,11 @@ public:
     using UnderlyingType = std::string;
     using SetterType = AsyncResultSetter<UnderlyingType>;
     using ResultType = AsyncResult<UnderlyingType>;
-    using Ptr = std::shared_ptr<HttpRequest>;
 
     using OnReady = void(const UnderlyingType&);
     using OnError = void(std::error_code);
 
-    [[nodiscard]] static Ptr
+    [[nodiscard]] static std::shared_ptr<HttpRequest>
     create(io::any_io_executor executor, ssl::context& context);
 
     [[nodiscard]] bool

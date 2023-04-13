@@ -48,7 +48,7 @@ protected:
     waitForTermination();
 
     void
-    addSubsystem(Subsystem::Ptr subsystem);
+    addSubsystem(std::unique_ptr<Subsystem> subsystem);
 
     void
     initialize(Application& application) override;
@@ -70,7 +70,7 @@ private:
     handleHelp(const po::options_description& description);
 
 private:
-    using Subsystems = std::vector<Subsystem::Ptr>;
+    using Subsystems = std::vector<std::unique_ptr<Subsystem>>;
 
     Subsystems _subsystems;
     po::variables_map _options;

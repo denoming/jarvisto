@@ -96,7 +96,7 @@ Application::waitForTermination()
 }
 
 void
-Application::addSubsystem(Subsystem::Ptr subsystem)
+Application::addSubsystem(std::unique_ptr<Subsystem> subsystem)
 {
     _subsystems.push_back(std::move(subsystem));
 }

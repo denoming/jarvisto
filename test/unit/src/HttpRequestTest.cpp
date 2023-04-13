@@ -38,7 +38,7 @@ public:
 public:
     Worker worker;
     SecureContext context;
-    HttpRequest::Ptr request;
+    std::shared_ptr<HttpRequest> request;
 };
 
 TEST_F(HttpRequestTest, GET)

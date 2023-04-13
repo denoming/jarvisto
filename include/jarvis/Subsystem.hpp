@@ -10,8 +10,6 @@ class Application;
 
 class JARC_EXPORT Subsystem {
 public:
-    using Ptr = std::unique_ptr<Subsystem>;
-
     virtual ~Subsystem() = default;
 
     [[nodiscard]] virtual const char*

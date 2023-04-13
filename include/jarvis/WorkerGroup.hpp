@@ -5,6 +5,7 @@
 #include "jarvis/Network.hpp"
 
 #include <vector>
+#include <memory>
 
 namespace jar {
 
@@ -32,7 +33,7 @@ public:
 
 private:
     std::size_t _index;
-    std::vector<IWorker::Ptr> _workers;
+    std::vector<std::unique_ptr<IWorker>> _workers;
 };
 
 } // namespace jar

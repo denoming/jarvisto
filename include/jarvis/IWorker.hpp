@@ -2,14 +2,10 @@
 
 #include "jarvis/Network.hpp"
 
-#include <memory>
-
 namespace jar {
 
 class IWorker {
 public:
-    using Ptr = std::unique_ptr<IWorker>;
-
     virtual ~IWorker() = default;
 
     [[nodiscard]] virtual bool

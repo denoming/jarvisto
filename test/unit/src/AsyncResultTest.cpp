@@ -64,8 +64,8 @@ TEST(AsyncResultTest, Callback)
 
     auto s2 = makeResultSetter<std::string>(onReady.AsStdFunction(), onError.AsStdFunction());
     auto r2 = s2.getResult();
-    EXPECT_CALL(onError, Call(Not(sys::error_code{})));
-    s2.setError(sys::errc::make_error_code(sys::errc::bad_message));
+    EXPECT_CALL(onError, Call(Not(std::error_code{})));
+    s2.setError(std::make_error_code(std::errc::bad_message));
 }
 
 TEST(AsyncResultTest, Wait)
@@ -75,7 +75,7 @@ TEST(AsyncResultTest, Wait)
 
     std::jthread thread{[s = std::move(s)]() mutable {
         std::this_thread::sleep_for(std::chrono::milliseconds{100});
-        s.setError(sys::errc::make_error_code(sys::errc::bad_message));
+        s.setError(std::make_error_code(std::errc::bad_message));
     }};
 
     EXPECT_FALSE(r.ready());

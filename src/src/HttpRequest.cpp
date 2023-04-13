@@ -4,7 +4,7 @@
 
 namespace jar {
 
-HttpRequest::Ptr
+std::shared_ptr<HttpRequest>
 HttpRequest::create(io::any_io_executor executor, ssl::context& context)
 {
     return std::shared_ptr<HttpRequest>(new HttpRequest{std::move(executor), context});
