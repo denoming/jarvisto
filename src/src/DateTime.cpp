@@ -6,25 +6,41 @@
 
 namespace jar {
 
-std::expected<int64_t, std::error_code>
+std::expected<UtcTimestamp, std::error_code>
 parseUtcDateTime(std::string_view input)
 {
-    date::utc_seconds value;
+    UtcTimestamp value;
     std::istringstream ss{std::string{input}};
     if (date::from_stream(ss, "%Y-%m-%dT%H:%M:%6SZ", value); ss.fail()) {
         return std::unexpected(std::make_error_code(std::errc::invalid_argument));
     } else {
-        return value.time_since_epoch().count();
+        return value;
+    }
+}
+
+std::expected<uint64_t, std::error_code>
+parseUtcDateTimeRaw(std::string_view input)
+{
+    if (const auto result = parseUtcDateTime(input); result) {
+        return result.value().time_since_epoch().count();
+    } else {
+        return std::unexpected(result.error());
     }
 }
 
 std::string
-formatUtcDateTime(int64_t input)
+formatUtcDateTime(UtcTimestamp input)
 {
-    date::utc_seconds seconds{std::chrono::seconds{input}};
     std::ostringstream ss;
-    date::to_stream(ss, "%FT%TZ", seconds);
+    date::to_stream(ss, "%FT%TZ", input);
     return ss.str();
+}
+
+std::string
+formatUtcDateTimeRaw(uint16_t input)
+{
+    UtcTimestamp ts{std::chrono::seconds{input}};
+    return formatUtcDateTime(ts);
 }
 
 } // namespace jar
