@@ -26,7 +26,7 @@ parseUtcDateTime(std::string_view input)
     }
 }
 
-std::expected<uint64_t, std::error_code>
+std::expected<int64_t, std::error_code>
 parseUtcDateTimeRaw(std::string_view input)
 {
     if (const auto result = parseUtcDateTime(input); result) {
@@ -45,7 +45,7 @@ formatUtcDateTime(UtcTimestamp input)
 }
 
 std::string
-formatUtcDateTimeRaw(uint16_t input)
+formatUtcDateTimeRaw(int64_t input)
 {
     UtcTimestamp ts{std::chrono::seconds{input}};
     return formatUtcDateTime(ts);

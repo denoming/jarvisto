@@ -34,7 +34,7 @@ parseUtcDateTime(std::string_view input);
  * @param input the date and time (ex. 2023-05-20T14:34:50Z)
  * @return the timestamp in seconds from epoch
  */
-JARC_EXPORT std::expected<uint64_t, std::error_code>
+JARC_EXPORT std::expected<int64_t, std::error_code>
 parseUtcDateTimeRaw(std::string_view input);
 
 /**
@@ -51,6 +51,6 @@ formatUtcDateTime(UtcTimestamp input);
  * @return
  */
 JARC_EXPORT std::string
-formatUtcDateTimeRaw(uint16_t input);
+formatUtcDateTimeRaw(int64_t input);
 
 } // namespace jar
