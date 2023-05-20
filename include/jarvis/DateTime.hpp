@@ -11,26 +11,34 @@
 
 namespace jar {
 
-/* UTC timestamp in seconds */
+/* UTC timestamp (seconds from January 1, 1970 at midnight) */
 using UtcTimestamp = date::utc_seconds;
 
 /**
- * Parse date and time in ISO8601 format (UTC)
- * Example: 2023-05-20T14:34:50Z
+ * Returns UTC timestamp
+ * @return the UTC timestamp
+ */
+JARC_EXPORT UtcTimestamp
+getUtcTimestamp();
+
+/**
+ * Parses date and time in ISO8601 format (UTC)
+ * @param input the date and time (ex. 2023-05-20T14:34:50Z)
+ * @return
  */
 JARC_EXPORT std::expected<UtcTimestamp, std::error_code>
 parseUtcDateTime(std::string_view input);
 
 /**
- *
- * @param input
- * @return
+ * Parses date and time in ISO8601 format (UTC)
+ * @param input the date and time (ex. 2023-05-20T14:34:50Z)
+ * @return the timestamp in seconds from epoch
  */
 JARC_EXPORT std::expected<uint64_t, std::error_code>
 parseUtcDateTimeRaw(std::string_view input);
 
 /**
- * Format date and time in ISO8601 format (UTC)
+ * Format date and time to ISO8601 format (UTC)
  * @param input the date and time in UTC
  * @return the formatted date time string
  */
@@ -38,8 +46,8 @@ JARC_EXPORT std::string
 formatUtcDateTime(UtcTimestamp input);
 
 /**
- *
- * @param input
+ * Formats date and time to ISO8601 format (UTC)
+ * @param input the date and time in seconds from epoch
  * @return
  */
 JARC_EXPORT std::string

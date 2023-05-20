@@ -1,10 +1,18 @@
 #include "jarvis/DateTime.hpp"
 
+#include <date/date.h>
 #include <date/tz.h>
 
 #include <sstream>
 
 namespace jar {
+
+UtcTimestamp
+getUtcTimestamp()
+{
+    const auto now = date::utc_clock::now();
+    return std::chrono::time_point_cast<std::chrono::seconds>(now);
+}
 
 std::expected<UtcTimestamp, std::error_code>
 parseUtcDateTime(std::string_view input)

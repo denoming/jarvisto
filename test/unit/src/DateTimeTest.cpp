@@ -11,6 +11,12 @@ using namespace jar;
 
 using namespace std::literals;
 
+TEST(DateTimeTest, GetTimestamp)
+{
+    const auto ts = getUtcTimestamp();
+    EXPECT_NE(ts, UtcTimestamp{});
+}
+
 TEST(DateTimeTest, ParseUtcDateTime)
 {
     year_month_day ymd{April / 22 / 2023};
