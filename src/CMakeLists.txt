@@ -34,6 +34,7 @@ target_sources(${TARGET}
         src/Cancellable.cpp
         src/HttpRequest.cpp
         src/Utils.cpp
+        src/DateTime.cpp
 )
 
 target_include_directories(${TARGET}
@@ -50,6 +51,8 @@ target_link_libraries(${TARGET}
            Boost::url
            OpenSSL::SSL
            OpenSSL::Crypto
+           date::date
+           date::date-tz
 )
 
 if (JARVIS_ENABLE_DLT)
