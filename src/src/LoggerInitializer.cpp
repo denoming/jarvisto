@@ -56,7 +56,7 @@ setupDefaultLogger()
 void
 addConsoleSink()
 {
-    static constexpr const char* kFormat{"[%Y-%m-%d %H:%M:%S.%e] [%P:%t] [%L] [%*] %-100!v"};
+    static constexpr const char* kFormat{"[%Y-%m-%d %H:%M:%S.%e] [%P:%t] [%L] [%*] %v"};
     auto formatter = std::make_unique<spdlog::pattern_formatter>();
     formatter->add_flag<ShortFilenameAndLine>('*').set_pattern(kFormat);
 
