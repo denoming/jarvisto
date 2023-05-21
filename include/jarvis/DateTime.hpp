@@ -1,9 +1,7 @@
 #pragma once
 
 #include "jarvis/CommonExport.hpp"
-
-#include <date/date.h>
-#include <date/tz.h>
+#include "jarvis/Timestamp.hpp"
 
 #include <string_view>
 #include <expected>
@@ -11,46 +9,38 @@
 
 namespace jar {
 
-/* UTC timestamp (seconds from January 1, 1970 at midnight) */
-using UtcTimestamp = date::utc_seconds;
-
 /**
- * Returns UTC timestamp
+ * Parses date and time  (UTC)
+ * @param input the date and time (ex. 2023-05-20T14:34:50Z)
  * @return the UTC timestamp
  */
-JARC_EXPORT UtcTimestamp
-getUtcTimestamp();
-
-/**
- * Parses date and time in ISO8601 format (UTC)
- * @param input the date and time (ex. 2023-05-20T14:34:50Z)
- * @return
- */
-JARC_EXPORT std::expected<UtcTimestamp, std::error_code>
+JARC_EXPORT std::expected<Timestamp, std::error_code>
 parseUtcDateTime(std::string_view input);
 
 /**
- * Parses date and time in ISO8601 format (UTC)
- * @param input the date and time (ex. 2023-05-20T14:34:50Z)
- * @return the timestamp in seconds from epoch
- */
-JARC_EXPORT std::expected<int64_t, std::error_code>
-parseUtcDateTimeRaw(std::string_view input);
-
-/**
- * Format date and time to ISO8601 format (UTC)
- * @param input the date and time in UTC
- * @return the formatted date time string
+ * Formats timestamp to string in ISO8601 format (UTC)
+ * @param input the timestamp
+ * @return the formatted string with date and time
  */
 JARC_EXPORT std::string
-formatUtcDateTime(UtcTimestamp input);
+formatUtcDateTime(Timestamp input);
 
 /**
- * Formats date and time to ISO8601 format (UTC)
- * @param input the date and time in seconds from epoch
- * @return
+ * Parses date and time in ISO8601 format with offset (not UTC)
+ * @param input the zoned date time (with offset)
+ * @return the UTC timestamp
+ */
+JARC_EXPORT std::expected<Timestamp, std::error_code>
+parseZonedDateTime(std::string_view input,
+                   std::string* abbrev = nullptr,
+                   std::chrono::minutes* offset = nullptr);
+
+/**
+ * Formats timestamp to string in ISO8601 format with given offset
+ * @param input the timestamp
+ * @return the formatted string with date and time
  */
 JARC_EXPORT std::string
-formatUtcDateTimeRaw(int64_t input);
+formatZonedDateTime(Timestamp input, std::chrono::minutes* offset = nullptr);
 
 } // namespace jar

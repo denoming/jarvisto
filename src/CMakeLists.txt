@@ -35,6 +35,7 @@ target_sources(${TARGET}
         src/HttpRequest.cpp
         src/Utils.cpp
         src/DateTime.cpp
+        src/Timestamp.cpp
 )
 
 target_include_directories(${TARGET}

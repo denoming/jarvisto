@@ -1,54 +1,56 @@
 #include "jarvis/DateTime.hpp"
 
-#include <date/date.h>
 #include <date/tz.h>
 
 #include <sstream>
 
+namespace krn = std::chrono;
+
 namespace jar {
 
-UtcTimestamp
-getUtcTimestamp()
-{
-    const auto now = date::utc_clock::now();
-    return std::chrono::time_point_cast<std::chrono::seconds>(now);
-}
-
-std::expected<UtcTimestamp, std::error_code>
+std::expected<Timestamp, std::error_code>
 parseUtcDateTime(std::string_view input)
 {
-    UtcTimestamp value;
+    date::utc_seconds value;
     std::istringstream ss{std::string{input}};
     if (date::from_stream(ss, "%Y-%m-%dT%H:%M:%6SZ", value); ss.fail()) {
         return std::unexpected(std::make_error_code(std::errc::invalid_argument));
     } else {
-        return value;
-    }
-}
-
-std::expected<int64_t, std::error_code>
-parseUtcDateTimeRaw(std::string_view input)
-{
-    if (const auto result = parseUtcDateTime(input); result) {
-        return result.value().time_since_epoch().count();
-    } else {
-        return std::unexpected(result.error());
+        return Timestamp{value};
     }
 }
 
 std::string
-formatUtcDateTime(UtcTimestamp input)
+formatUtcDateTime(Timestamp input)
 {
     std::ostringstream ss;
-    date::to_stream(ss, "%FT%TZ", input);
+    date::to_stream(ss, "%FT%TZ", date::utc_seconds{input});
     return ss.str();
 }
 
-std::string
-formatUtcDateTimeRaw(int64_t input)
+std::expected<Timestamp, std::error_code>
+parseZonedDateTime(std::string_view input, std::string* abbrev, std::chrono::minutes* offset)
 {
-    UtcTimestamp ts{std::chrono::seconds{input}};
-    return formatUtcDateTime(ts);
+    date::utc_seconds value;
+    std::istringstream ss{std::string{input}};
+    if (date::from_stream(ss, "%Y-%m-%dT%H:%M:%6S%z", value, abbrev, offset); ss.fail()) {
+        return std::unexpected(std::make_error_code(std::errc::invalid_argument));
+    } else {
+        return Timestamp{value};
+    }
+}
+
+std::string
+formatZonedDateTime(Timestamp input, std::chrono::minutes* offset)
+{
+    krn::seconds d;
+    if (offset) {
+        d = krn::duration_cast<krn::seconds>(*offset);
+    }
+    date::local_seconds ls = clock_cast<date::local_t>(date::utc_seconds{input}) + d;
+    std::stringstream ss;
+    to_stream(ss, "%FT%T%z", ls, nullptr, &d);
+    return ss.str();
 }
 
 } // namespace jar
