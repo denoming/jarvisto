@@ -1,7 +1,7 @@
 #pragma once
 
-#include "jarvis/CommonExport.hpp"
-#include "jarvis/Timestamp.hpp"
+#include "jarvisto/Export.hpp"
+#include "jarvisto/Timestamp.hpp"
 
 #include <string_view>
 #include <expected>
@@ -14,7 +14,7 @@ namespace jar {
  * @param input the date and time (ex. 2023-05-20T14:34:50Z)
  * @return the UTC timestamp
  */
-JARC_EXPORT std::expected<Timestamp, std::error_code>
+JARVISTO_EXPORT std::expected<Timestamp, std::error_code>
 parseUtcDateTime(std::string_view input);
 
 /**
@@ -22,7 +22,7 @@ parseUtcDateTime(std::string_view input);
  * @param input the timestamp
  * @return the formatted string with date and time
  */
-JARC_EXPORT std::string
+JARVISTO_EXPORT std::string
 formatUtcDateTime(Timestamp input);
 
 /**
@@ -30,7 +30,7 @@ formatUtcDateTime(Timestamp input);
  * @param input the zoned date time (with offset)
  * @return the UTC timestamp
  */
-JARC_EXPORT std::expected<Timestamp, std::error_code>
+JARVISTO_EXPORT std::expected<Timestamp, std::error_code>
 parseZonedDateTime(std::string_view input,
                    std::string* abbrev = nullptr,
                    std::chrono::minutes* offset = nullptr);
@@ -40,7 +40,7 @@ parseZonedDateTime(std::string_view input,
  * @param input the timestamp
  * @return the formatted string with date and time
  */
-JARC_EXPORT std::string
+JARVISTO_EXPORT std::string
 formatZonedDateTime(Timestamp input, std::chrono::minutes* offset = nullptr);
 
 } // namespace jar

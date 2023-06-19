@@ -1,7 +1,7 @@
 #pragma once
 
-#include "jarvis/Subsystem.hpp"
-#include "jarvis/CommonExport.hpp"
+#include "jarvisto/Subsystem.hpp"
+#include "jarvisto/Export.hpp"
 
 #include <boost/program_options.hpp>
 
@@ -11,7 +11,7 @@ namespace po = boost::program_options;
 
 namespace jar {
 
-class JARC_EXPORT Application : public Subsystem {
+class JARVISTO_EXPORT Application : public Subsystem {
 public:
     static Application&
     instance();

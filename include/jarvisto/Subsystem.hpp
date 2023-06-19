@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jarvis/CommonExport.hpp"
+#include "jarvisto/Export.hpp"
 
 #include <memory>
 
@@ -8,7 +8,7 @@ namespace jar {
 
 class Application;
 
-class JARC_EXPORT Subsystem {
+class JARVISTO_EXPORT Subsystem {
 public:
     virtual ~Subsystem() = default;
 

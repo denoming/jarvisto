@@ -1,7 +1,7 @@
-#include "jarvis/LoggerInitializer.hpp"
+#include "jarvisto/LoggerInitializer.hpp"
 
-#include "jarvis/Options.hpp"
-#ifdef JARVIS_ENABLE_DLT
+#include "org/denoming/jarvisto/Options.hpp"
+#ifdef ENABLE_DLT
 #include "common/LoggerDltSink.hpp"
 #endif
 
@@ -66,7 +66,7 @@ addConsoleSink()
     spdlog::default_logger()->sinks().push_back(sink);
 }
 
-#ifdef JARVIS_ENABLE_DLT
+#ifdef ENABLE_DLT
 void
 addDltSink(const char* ctxId, const char* ctxDesc)
 {
@@ -106,7 +106,7 @@ LoggerInitializer::initialize(const char* ctxId, const char* ctxDesc)
     if (!_initialized) {
         setupDefaultLogger();
         addConsoleSink();
-#ifdef JARVIS_ENABLE_DLT
+#ifdef ENABLE_DLT
         addDltSink(ctxId, ctxDesc);
 #endif
         _initialized = true;

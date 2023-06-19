@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(jarvis-common
-    VERSION 0.1.1
-    DESCRIPTION "J.A.R.V.I.S Common Library"
+project(jarvisto
+    VERSION 0.2.1
+    DESCRIPTION "Jarvisto Library"
 )
 
 include(cmake/ProjectOptions.cmake)
@@ -11,6 +11,6 @@ include(cmake/ProjectInstall.cmake)
 
 add_subdirectory(config)
 add_subdirectory(src)
-if(JARVIS_ENABLE_TESTS)
+if(ENABLE_TESTS)
     add_subdirectory(test)
 endif()

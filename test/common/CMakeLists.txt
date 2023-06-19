@@ -1,7 +1,7 @@
-set(TARGET jarvis-common-test-common)
+set(TARGET jarvisto-test-common)
 
 add_library(${TARGET} STATIC)
-add_library(Jarvis::Common::Test::Common ALIAS ${TARGET})
+add_library(Jarvisto::Test::Common ALIAS ${TARGET})
 
 target_sources(${TARGET}
     PRIVATE src/TestMain.cpp
@@ -12,8 +12,9 @@ target_include_directories(${TARGET}
 )
 
 target_link_libraries(${TARGET}
-    PUBLIC Jarvis::Common
-    PUBLIC GTest::gtest GTest::gmock
+    PUBLIC Jarvisto::Jarvisto
+    PUBLIC GTest::gtest
+           GTest::gmock
 )
 
 target_compile_features(${TARGET} PUBLIC cxx_std_23)

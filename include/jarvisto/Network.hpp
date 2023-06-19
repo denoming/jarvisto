@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jarvis/CommonExport.hpp"
+#include "jarvisto/Export.hpp"
 
 #include <boost/asio.hpp>
 #include <boost/beast/core.hpp>
@@ -35,7 +35,7 @@ static constexpr auto kHttpDefaultTimeout = std::chrono::seconds{30};
  * @param hostname - the hostname
  * @param error - the error code in case of unsuccessful
  */
-JARC_EXPORT void
+JARVISTO_EXPORT void
 setServerHostname(beast::ssl_stream<beast::tcp_stream>& stream,
                   std::string_view hostname,
                   std::error_code& error);
@@ -46,7 +46,7 @@ setServerHostname(beast::ssl_stream<beast::tcp_stream>& stream,
  * @param hostname - the hostname
  * @param error - the error code in case of unsuccessful
  */
-JARC_EXPORT void
+JARVISTO_EXPORT void
 setSniHostname(beast::ssl_stream<beast::tcp_stream>& stream,
                std::string_view hostname,
                std::error_code& error);
@@ -56,7 +56,7 @@ setSniHostname(beast::ssl_stream<beast::tcp_stream>& stream,
  * @param stream - the TCP stream
  * @param timeout - the timeout of operation
  */
-JARC_EXPORT void
+JARVISTO_EXPORT void
 resetTimeout(beast::ssl_stream<beast::tcp_stream>& stream,
              std::chrono::seconds timeout = std::chrono::seconds{kHttpDefaultTimeout});
 

@@ -2,15 +2,14 @@ include(GNUInstallDirs)
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 
-set(TARGET jarvis-common-library)
+set(TARGET jarvisto)
 
 add_library(${TARGET} SHARED)
-add_library(Jarvis::Common ALIAS ${TARGET})
+add_library(Jarvisto::Jarvisto ALIAS ${TARGET})
 
 set_target_properties(${TARGET}
     PROPERTIES
-        OUTPUT_NAME jarvis-common
-        EXPORT_NAME Common
+        EXPORT_NAME Jarvisto
 )
 
 set_target_properties(${TARGET}
@@ -56,7 +55,7 @@ target_link_libraries(${TARGET}
            date::date-tz
 )
 
-if (JARVIS_ENABLE_DLT)
+if (ENABLE_DLT)
     target_sources(${TARGET} PRIVATE src/LoggerDltSink.cpp)
     target_link_libraries(${TARGET} PRIVATE PkgConfig::Dlt)
 endif()
@@ -69,16 +68,16 @@ target_compile_definitions(${TARGET}
 
 # Generate export header file with export macros
 generate_export_header(${TARGET}
-    BASE_NAME JARC
-    EXPORT_FILE_NAME jarvis/CommonExport.hpp
+    BASE_NAME JARVISTO
+    EXPORT_FILE_NAME jarvisto/Export.hpp
 )
 
 # Install target files except namelink file
 install(TARGETS ${TARGET}
-    EXPORT JarvisCommonRuntime
+    EXPORT JarvistoRuntime
     LIBRARY
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT JarvisCommonRuntime
+        COMPONENT JarvistoRuntime
         NAMELINK_SKIP
     INCLUDES
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
@@ -86,53 +85,52 @@ install(TARGETS ${TARGET}
 
 # Install target namelink file
 install(TARGETS ${TARGET}
-    EXPORT JarvisCommonDevelopment
+    EXPORT JarvistoDevelopment
     LIBRARY
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT JarvisCommonDevelopment
+        COMPONENT JarvistoDevelopment
         NAMELINK_ONLY
     ARCHIVE
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT JarvisCommonDevelopment
+        COMPONENT JarvistoDevelopment
     INCLUDES
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 # Install package config file
-install(EXPORT JarvisCommonRuntime
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/JarvisCommon
-    NAMESPACE Jarvis::
-    COMPONENT JarvisCommonRuntime
-    FILE JarvisCommonRuntime.cmake
+install(EXPORT JarvistoRuntime
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
+    NAMESPACE Jarvisto::
+    COMPONENT JarvistoRuntime
+    FILE JarvistoRuntime.cmake
 )
 
 # Install package config file
-install(EXPORT JarvisCommonDevelopment
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/JarvisCommon
-    NAMESPACE Jarvis::
-    COMPONENT JarvisCommonDevelopment
-    FILE JarvisCommonDevelopment.cmake
+install(EXPORT JarvistoDevelopment
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
+    NAMESPACE Jarvisto::
+    COMPONENT JarvistoDevelopment
+    FILE JarvistoDevelopment.cmake
 )
 
 # Install library header files
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
     TYPE INCLUDE
-    COMPONENT JarvisCommonDevelopment
+    COMPONENT JarvistoDevelopment
     FILES_MATCHING
         PATTERN *.hpp
 )
 
 # Install export header file
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jarvis/CommonExport.hpp
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/jarvis
-    COMPONENT JarvisCommonDevelopment
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jarvisto/Export.hpp
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/jarvisto
+    COMPONENT JarvistoDevelopment
 )
 
 # Generate package config and version file
 configure_package_config_file(
-    ${PROJECT_SOURCE_DIR}/config/cmake/JarvisCommonConfig.cmake.in
-    JarvisCommonConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/JarvisCommon
+    ${PROJECT_SOURCE_DIR}/config/cmake/JarvistoConfig.cmake.in JarvistoConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
     NO_SET_AND_CHECK_MACRO
     NO_CHECK_REQUIRED_COMPONENTS_MACRO
 )
@@ -142,12 +140,12 @@ write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/JarvisCommonConfigV
 
 # Install package config and version file
 install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/JarvisCommonConfig.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/JarvisCommon
-    COMPONENT JarvisCommonDevelopment
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/JarvistoConfig.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
+    COMPONENT JarvistoDevelopment
 )
 install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/JarvisCommonConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/JarvisCommon
-    COMPONENT JarvisCommonDevelopment
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/JarvistoConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
+    COMPONENT JarvistoDevelopment
 )

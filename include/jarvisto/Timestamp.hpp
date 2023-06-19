@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jarvis/CommonExport.hpp"
+#include "jarvisto/Export.hpp"
 
 #include <date/date.h>
 #include <date/tz.h>
@@ -12,7 +12,7 @@ namespace jar {
  *
  * Contains seconds since January 1, 1970 at midnight.
  */
-struct JARC_EXPORT Timestamp {
+struct JARVISTO_EXPORT Timestamp {
     Timestamp() = default;
 
     explicit Timestamp(int64_t v);

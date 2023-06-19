@@ -1,15 +1,15 @@
 #pragma once
 
-#include "jarvis/CommonExport.hpp"
-#include "jarvis/IWorker.hpp"
-#include "jarvis/Network.hpp"
+#include "jarvisto/Export.hpp"
+#include "jarvisto/IWorker.hpp"
+#include "jarvisto/Network.hpp"
 
 #include <thread>
 #include <vector>
 
 namespace jar {
 
-class JARC_EXPORT Worker final : public IWorker {
+class JARVISTO_EXPORT Worker final : public IWorker {
 public:
     explicit Worker(std::size_t threadsNum = 1);
 

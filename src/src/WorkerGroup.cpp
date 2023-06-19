@@ -1,6 +1,6 @@
-#include "jarvis/WorkerGroup.hpp"
+#include "jarvisto/WorkerGroup.hpp"
 
-#include "jarvis/Worker.hpp"
+#include "jarvisto/Worker.hpp"
 
 namespace jar {
 

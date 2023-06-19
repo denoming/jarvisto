@@ -1,10 +1,10 @@
 #pragma once
 
-#include "jarvis/CommonExport.hpp"
+#include "jarvisto/Export.hpp"
 
 namespace jar {
 
-class JARC_EXPORT LoggerInitializer {
+class JARVISTO_EXPORT LoggerInitializer {
 public:
     static LoggerInitializer&
     instance();

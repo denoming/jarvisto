@@ -1,6 +1,6 @@
-#include "jarvis/HttpRequest.hpp"
+#include "jarvisto/HttpRequest.hpp"
 
-#include "jarvis/Logger.hpp"
+#include "jarvisto/Logger.hpp"
 
 namespace jar {
 

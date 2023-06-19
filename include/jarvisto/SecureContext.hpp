@@ -1,11 +1,11 @@
 #pragma once
 
-#include "jarvis/CommonExport.hpp"
-#include "jarvis/Network.hpp"
+#include "jarvisto/Export.hpp"
+#include "jarvisto/Network.hpp"
 
 namespace jar {
 
-class JARC_EXPORT SecureContext {
+class JARVISTO_EXPORT SecureContext {
 public:
     SecureContext();
 

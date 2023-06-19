@@ -1,6 +1,6 @@
 #include "common/LoggerDltSink.hpp"
 
-#include "jarvis/Options.hpp"
+#include "jarvisto/Options.hpp"
 
 #include <boost/assert.hpp>
 
@@ -43,7 +43,7 @@ namespace jar {
 LoggerDltSink::LoggerDltSink(const char* contextId, const char* contextDesc) noexcept
 {
     if (dlt_init() == DLT_RETURN_OK) {
-        if (dlt_register_app(JARVIS_DLT_APPID, JARVIS_DLT_APPID_DESC) == DLT_RETURN_OK) {
+        if (dlt_register_app(DLT_APPID, DLT_APPID_DESC) == DLT_RETURN_OK) {
             _registerApp = true;
             _registerCtx = (dlt_register_context(&_ctx, contextId, contextDesc) == DLT_RETURN_OK);
         }

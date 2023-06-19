@@ -1,7 +1,7 @@
-#include "jarvis/Application.hpp"
+#include "jarvisto/Application.hpp"
 
-#include "jarvis/Logger.hpp"
-#include "jarvis/LoggerInitializer.hpp"
+#include "jarvisto/Logger.hpp"
+#include "jarvisto/LoggerInitializer.hpp"
 
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/signal_set.hpp>

@@ -1,4 +1,4 @@
-set(TARGET jarvis-common-unit-test)
+set(TARGET jarvisto-unit-test)
 
 add_executable(${TARGET} "")
 
@@ -11,7 +11,7 @@ target_sources(${TARGET}
 )
 
 target_link_libraries(${TARGET}
-    PRIVATE Jarvis::Common::Test::Common
+    PRIVATE Jarvisto::Test::Common
 )
 
 if(NOT CMAKE_CROSSCOMPILING)

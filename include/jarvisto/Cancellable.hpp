@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jarvis/CommonExport.hpp"
+#include "jarvisto/Export.hpp"
 
 #include <boost/asio/bind_cancellation_slot.hpp>
 #include <boost/asio/cancellation_signal.hpp>
@@ -11,7 +11,7 @@ namespace io = boost::asio;
 
 namespace jar {
 
-class JARC_EXPORT Cancellable {
+class JARVISTO_EXPORT Cancellable {
 public:
     Cancellable() = default;
 

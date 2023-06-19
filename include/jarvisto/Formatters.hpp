@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jarvis/Types.hpp"
+#include "jarvisto/Types.hpp"
 
 #include <fmt/core.h>
 

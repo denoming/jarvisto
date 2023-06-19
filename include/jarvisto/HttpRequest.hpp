@@ -1,9 +1,9 @@
 #pragma once
 
-#include "jarvis/CommonExport.hpp"
-#include "jarvis/AsyncResult.hpp"
-#include "jarvis/Cancellable.hpp"
-#include "jarvis/Network.hpp"
+#include "jarvisto/Export.hpp"
+#include "jarvisto/AsyncResult.hpp"
+#include "jarvisto/Cancellable.hpp"
+#include "jarvisto/Network.hpp"
 
 #include <functional>
 #include <memory>
@@ -12,8 +12,8 @@
 
 namespace jar {
 
-class JARC_EXPORT HttpRequest final : public std::enable_shared_from_this<HttpRequest>,
-                                      public Cancellable {
+class JARVISTO_EXPORT HttpRequest final : public std::enable_shared_from_this<HttpRequest>,
+                                          public Cancellable {
 public:
     using UnderlyingType = std::string;
     using SetterType = AsyncResultSetter<UnderlyingType>;

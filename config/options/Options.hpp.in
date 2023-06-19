@@ -1,6 +1,6 @@
 
-#cmakedefine JARVIS_ENABLE_TESTS
+#cmakedefine ENABLE_TESTS
 
-#cmakedefine JARVIS_ENABLE_DLT
-#cmakedefine JARVIS_DLT_APPID "@JARVIS_DLT_APPID@"
-#cmakedefine JARVIS_DLT_APPID_DESC "@JARVIS_DLT_APPID_DESC@"
+#cmakedefine ENABLE_DLT
+#cmakedefine DLT_APPID "@JARVIS_DLT_APPID@"
+#cmakedefine DLT_APPID_DESC "@JARVIS_DLT_APPID_DESC@"
