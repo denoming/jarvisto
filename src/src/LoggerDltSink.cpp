@@ -1,7 +1,5 @@
 #include "common/LoggerDltSink.hpp"
 
-#include "jarvisto/Options.hpp"
-
 #include <boost/assert.hpp>
 
 namespace {
@@ -40,12 +38,15 @@ toLogLevel(const spdlog::level::level_enum in) noexcept
 
 namespace jar {
 
-LoggerDltSink::LoggerDltSink(const char* contextId, const char* contextDesc) noexcept
+LoggerDltSink::LoggerDltSink(const char* appId,
+                             const char* appDesc,
+                             const char* ctxId,
+                             const char* ctxDesc) noexcept
 {
     if (dlt_init() == DLT_RETURN_OK) {
-        if (dlt_register_app(DLT_APPID, DLT_APPID_DESC) == DLT_RETURN_OK) {
+        if (dlt_register_app(appId, appDesc) == DLT_RETURN_OK) {
             _registerApp = true;
-            _registerCtx = (dlt_register_context(&_ctx, contextId, contextDesc) == DLT_RETURN_OK);
+            _registerCtx = (dlt_register_context(&_ctx, ctxId, ctxDesc) == DLT_RETURN_OK);
         }
     }
 }

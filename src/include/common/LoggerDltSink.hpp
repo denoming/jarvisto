@@ -9,7 +9,10 @@ namespace jar {
 
 class LoggerDltSink final : public spdlog::sinks::base_sink<std::mutex> {
 public:
-    LoggerDltSink(const char* contextId, const char* contextDesc) noexcept;
+    LoggerDltSink(const char* appId,
+                  const char* appDesc,
+                  const char* ctxId,
+                  const char* ctxDesc) noexcept;
 
     ~LoggerDltSink() final;
 

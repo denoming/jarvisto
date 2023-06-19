@@ -1,6 +1,6 @@
 #include "jarvisto/LoggerInitializer.hpp"
 
-#include "org/denoming/jarvisto/Options.hpp"
+#include "jarvisto/Options.hpp"
 #ifdef ENABLE_DLT
 #include "common/LoggerDltSink.hpp"
 #endif
@@ -68,13 +68,13 @@ addConsoleSink()
 
 #ifdef ENABLE_DLT
 void
-addDltSink(const char* ctxId, const char* ctxDesc)
+addDltSink(const char* appId, const char* appDesc, const char* ctxId, const char* ctxDesc)
 {
     static constexpr const char* kFormat{"[%P:%t] [%L] [%*] %v"};
     auto formatter = std::make_unique<spdlog::pattern_formatter>();
     formatter->add_flag<ShortFilenameAndLine>('*').set_pattern(kFormat);
 
-    const auto sink = std::make_shared<LoggerDltSink>(ctxId, ctxDesc);
+    const auto sink = std::make_shared<LoggerDltSink>(appId, appDesc, ctxId, ctxDesc);
     sink->set_level(spdlog::level::debug);
     sink->set_formatter(std::move(formatter));
     spdlog::default_logger()->sinks().push_back(sink);
@@ -101,13 +101,16 @@ LoggerInitializer::initialize()
 }
 
 void
-LoggerInitializer::initialize(const char* ctxId, const char* ctxDesc)
+LoggerInitializer::initialize(const char* appId,
+                              const char* appDesc,
+                              const char* ctxId,
+                              const char* ctxDesc)
 {
     if (!_initialized) {
         setupDefaultLogger();
         addConsoleSink();
 #ifdef ENABLE_DLT
-        addDltSink(ctxId, ctxDesc);
+        addDltSink(appId, appDesc, ctxId, ctxDesc);
 #endif
         _initialized = true;
     }

@@ -42,8 +42,6 @@ Application::parseArgs(int argc, char* argv[])
 int
 Application::run()
 {
-    LoggerInitializer::instance().initialize(contextId(), contextDesc());
-
     if (_helpRequested) {
         return EXIT_SUCCESS;
     }

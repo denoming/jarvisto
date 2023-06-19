@@ -30,14 +30,6 @@ public:
 protected:
     Application();
 
-    virtual const char*
-    contextId()
-        = 0;
-
-    virtual const char*
-    contextDesc()
-        = 0;
-
     virtual void
     proceed();
 
