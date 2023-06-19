@@ -1,7 +1,6 @@
 #include "jarvisto/Application.hpp"
 
 #include "jarvisto/Logger.hpp"
-#include "jarvisto/LoggerInitializer.hpp"
 
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/signal_set.hpp>
@@ -10,6 +9,7 @@
 
 namespace asio = boost::asio;
 namespace sys = boost::system;
+namespace po = boost::program_options;
 
 namespace jar {
 

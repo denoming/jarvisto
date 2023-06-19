@@ -7,8 +7,6 @@
 
 #include <vector>
 
-namespace po = boost::program_options;
-
 namespace jar {
 
 class JARVISTO_EXPORT Application : public Subsystem {
@@ -24,7 +22,7 @@ public:
     int
     run();
 
-    [[nodiscard]] const po::variables_map&
+    [[nodiscard]] const boost::program_options::variables_map&
     options() const;
 
 protected:
@@ -34,7 +32,7 @@ protected:
     proceed();
 
     virtual void
-    defineOptions(po::options_description& description);
+    defineOptions(boost::program_options::options_description& description);
 
     bool
     waitForTermination();
@@ -59,13 +57,13 @@ private:
     processOptions(int argc, char* argv[]);
 
     void
-    handleHelp(const po::options_description& description);
+    handleHelp(const boost::program_options::options_description& description);
 
 private:
     using Subsystems = std::vector<std::unique_ptr<Subsystem>>;
 
     Subsystems _subsystems;
-    po::variables_map _options;
+    boost::program_options::variables_map _options;
     bool _helpRequested;
 
     static Application* s_instance;
