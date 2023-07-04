@@ -134,7 +134,7 @@ configure_package_config_file(
     NO_SET_AND_CHECK_MACRO
     NO_CHECK_REQUIRED_COMPONENTS_MACRO
 )
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/JarvisCommonConfigVersion.cmake
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/JarvistoConfigVersion.cmake
     COMPATIBILITY SameMajorVersion
 )
 
