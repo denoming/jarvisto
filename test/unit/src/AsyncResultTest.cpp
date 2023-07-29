@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "jarvis/AsyncResult.hpp"
+#include "jarvisto/AsyncResult.hpp"
 
 #include <thread>
 

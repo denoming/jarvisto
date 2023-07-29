@@ -1,9 +1,9 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "jarvis/HttpRequest.hpp"
-#include "jarvis/SecureContext.hpp"
-#include "jarvis/Worker.hpp"
+#include "jarvisto/HttpRequest.hpp"
+#include "jarvisto/SecureContext.hpp"
+#include "jarvisto/Worker.hpp"
 
 #include <thread>
 

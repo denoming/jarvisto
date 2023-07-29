@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "jarvis/WorkerGroup.hpp"
+#include "jarvisto/WorkerGroup.hpp"
 
 #include <future>
 
