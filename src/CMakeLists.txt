@@ -57,7 +57,7 @@ target_link_libraries(${TARGET}
 
 if (ENABLE_DLT)
     target_sources(${TARGET} PRIVATE src/LoggerDltSink.cpp)
-    target_link_libraries(${TARGET} PRIVATE PkgConfig::Dlt)
+    target_link_libraries(${TARGET} PRIVATE Genivi::dlt)
 endif()
 
 target_compile_features(${TARGET} PUBLIC cxx_std_23)

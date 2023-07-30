@@ -1,0 +1,16 @@
+{
+  "name": "jarvisto",
+  "version": "0.2.1",
+  "builtin-baseline": "9d47b24eacbd1cd94f139457ef6cd35e5d92cc84",
+  "dependencies": [
+    "automotive-dlt",
+    "boost-asio",
+    "boost-beast",
+    "boost-core",
+    "boost-program-options",
+    "boost-url",
+    "date",
+    "gtest",
+    "spdlog"
+  ]
+}
