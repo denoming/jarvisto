@@ -39,8 +39,8 @@ target_sources(${TARGET}
 
 target_include_directories(${TARGET}
     PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+           $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
             $<BUILD_INTERFACE:${CMAKE_RUNTIME_OUTPUT_DIRECTORY}>
 )
 
@@ -93,8 +93,6 @@ install(TARGETS ${TARGET}
     ARCHIVE
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT JarvistoDevelopment
-    INCLUDES
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 # Install package config file
