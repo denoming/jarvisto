@@ -1,6 +1,6 @@
-#include "jarvisto/Network.hpp"
+#include "jarvisto/Http.hpp"
 
-namespace jar::net {
+namespace jar {
 
 void
 setServerHostname(beast::ssl_stream<beast::tcp_stream>& stream,
@@ -34,4 +34,4 @@ resetTimeout(beast::ssl_stream<beast::tcp_stream>& stream, std::chrono::seconds 
     beast::get_lowest_layer(stream).expires_after(timeout);
 }
 
-} // namespace jar::net
+} // namespace jar

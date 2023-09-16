@@ -2,7 +2,7 @@
 
 #include "jarvisto/Export.hpp"
 #include "jarvisto/IWorker.hpp"
-#include "jarvisto/Network.hpp"
+#include "jarvisto/Http.hpp"
 
 #include <vector>
 #include <memory>

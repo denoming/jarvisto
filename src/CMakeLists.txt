@@ -29,7 +29,7 @@ target_sources(${TARGET}
         src/SecureContext.cpp
         src/Worker.cpp
         src/WorkerGroup.cpp
-        src/Network.cpp
+        src/Http.cpp
         src/Cancellable.cpp
         src/HttpRequest.cpp
         src/Utils.cpp

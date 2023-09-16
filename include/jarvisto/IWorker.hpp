@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jarvisto/Network.hpp"
+#include "jarvisto/Http.hpp"
 
 namespace jar {
 

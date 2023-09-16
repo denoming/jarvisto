@@ -1,8 +1,8 @@
 #pragma once
 
 #include "jarvisto/Export.hpp"
+#include "jarvisto/Asio.hpp"
 
-#include <boost/asio.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/beast/ssl.hpp>
@@ -12,15 +12,10 @@
 #include <chrono>
 
 namespace beast = boost::beast;
-namespace sys = boost::system;
 namespace http = beast::http;
-namespace io = boost::asio;
-namespace ssl = boost::asio::ssl;
 namespace urls = boost::urls;
 
-using tcp = boost::asio::ip::tcp;
-
-namespace jar::net {
+namespace jar {
 
 /* HTTP version codes */
 static constexpr auto kHttpVersion10 = uint32_t{10u};
@@ -60,4 +55,4 @@ JARVISTO_EXPORT void
 resetTimeout(beast::ssl_stream<beast::tcp_stream>& stream,
              std::chrono::seconds timeout = std::chrono::seconds{kHttpDefaultTimeout});
 
-} // namespace jar::net
+} // namespace jar

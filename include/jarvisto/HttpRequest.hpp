@@ -3,7 +3,7 @@
 #include "jarvisto/Export.hpp"
 #include "jarvisto/AsyncResult.hpp"
 #include "jarvisto/Cancellable.hpp"
-#include "jarvisto/Network.hpp"
+#include "jarvisto/Http.hpp"
 
 #include <functional>
 #include <memory>

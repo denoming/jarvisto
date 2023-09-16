@@ -1,7 +1,7 @@
 #pragma once
 
 #include "jarvisto/Export.hpp"
-#include "jarvisto/Network.hpp"
+#include "jarvisto/Http.hpp"
 
 namespace jar {
 
