@@ -25,7 +25,6 @@
       "version>=": "1.81.0"
     },
     "date",
-    "gtest",
     "spdlog"
   ]
 }
