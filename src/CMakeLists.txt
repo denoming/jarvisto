@@ -35,6 +35,8 @@ target_sources(${TARGET}
         src/Utils.cpp
         src/DateTime.cpp
         src/Timestamp.cpp
+        src/Mqtt.cpp
+        src/MqttBasicClient.cpp
 )
 
 target_include_directories(${TARGET}
@@ -49,10 +51,12 @@ target_link_libraries(${TARGET}
            Boost::headers
            Boost::program_options
            Boost::url
-           OpenSSL::SSL
-           OpenSSL::Crypto
            date::date
            date::date-tz
+           PkgConfig::SigCpp
+    PRIVATE PkgConfig::Mosquitto
+            OpenSSL::SSL
+            OpenSSL::Crypto
 )
 
 if (ENABLE_DLT)

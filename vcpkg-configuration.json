@@ -7,9 +7,9 @@
   "registries": [
     {
       "kind": "git",
-      "baseline": "46e1953c5ad9e5e59fe114390c9e70bf6bad35ba",
+      "baseline": "5cc830699bc3510b9264032d8d993fb25abc4701",
       "repository": "git@github.com:karz0n/vcpkg-registry.git",
-      "packages": [ "automotive-dlt" ]
+      "packages": [ "automotive-dlt", "mosquitto" ]
     }
   ]
 }

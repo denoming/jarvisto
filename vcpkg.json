@@ -29,6 +29,8 @@
       "version>=": "1.81.0"
     },
     "date",
-    "spdlog"
+    "spdlog",
+    "mosquitto",
+    "libsigcpp"
   ]
 }

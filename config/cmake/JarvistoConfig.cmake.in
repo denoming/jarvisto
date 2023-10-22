@@ -20,11 +20,14 @@ endif()
 
 # Store components to load in a safer variable name
 set(${CMAKE_FIND_PACKAGE_NAME}_comps ${comps})
+
 include(CMakeFindDependencyMacro)
-find_dependency(Boost 1.81.0 REQUIRED COMPONENTS program_options url)
-find_dependency(OpenSSL REQUIRED)
-find_dependency(date REQUIRED)
-find_dependency(spdlog REQUIRED)
+find_dependency(Boost COMPONENTS program_options url)
+find_dependency(date)
+find_dependency(spdlog)
+
+find_dependency(PkgConfig)
+pkg_check_modules(SigCpp REQUIRED IMPORTED_TARGET sigc++-3.0)
 
 # Figure out all components are present
 foreach(comp IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_comps)
