@@ -14,7 +14,10 @@
     },
     {
       "name": "boost-asio",
-      "version>=": "1.81.0"
+      "version>=": "1.81.0",
+      "features": [
+        "ssl"
+      ]
     },
     {
       "name": "boost-beast",
