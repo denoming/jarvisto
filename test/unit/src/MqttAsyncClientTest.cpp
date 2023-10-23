@@ -12,13 +12,13 @@ using namespace jar;
 
 class MqttAsyncClientTest : public Test {
 public:
-    static inline const std::string_view kMqttUser{"denys"};
-    static inline const std::string_view kMqttPassword{"123456"};
-    static inline const std::string_view kMqttServer{"192.168.1.43"};
+    static inline const std::string_view kMqttUser{"<username>>"};
+    static inline const std::string_view kMqttPassword{"<password>"};
+    static inline const std::string_view kMqttServer{"<server-ip-address>"};
     static inline const uint16_t kMqttPort{1883};
 };
 
-TEST_F(MqttAsyncClientTest, Connecting)
+TEST_F(MqttAsyncClientTest, DISABLED_Connecting)
 {
     io::io_context context;
 
@@ -43,7 +43,7 @@ TEST_F(MqttAsyncClientTest, Connecting)
     context.run();
 }
 
-TEST_F(MqttAsyncClientTest, Publishing)
+TEST_F(MqttAsyncClientTest, DISABLED_Publishing)
 {
     static const std::string_view kPayload{"Hello World!"};
     static const std::string_view kTopic{"jarvisto/test"};
