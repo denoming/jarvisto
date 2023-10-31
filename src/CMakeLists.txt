@@ -54,7 +54,7 @@ target_link_libraries(${TARGET}
            date::date
            date::date-tz
            PkgConfig::SigCpp
-    PRIVATE PkgConfig::Mosquitto
+    PRIVATE mosquitto::mosquitto
             OpenSSL::SSL
             OpenSSL::Crypto
 )
