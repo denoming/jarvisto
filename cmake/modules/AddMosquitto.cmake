@@ -1,1 +1,1 @@
-find_package(mosquitto REQUIRE)
+find_package(mosquitto REQUIRED)
