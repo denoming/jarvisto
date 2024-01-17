@@ -2,7 +2,7 @@
 
 set -e
 
-DOCKER_IMAGE_NAME=my/jarvis-dev-image:user
+DOCKER_IMAGE_NAME=my/jarvis
 
 PROJECT_DIR=$(dirname "$(dirname "$(realpath -s $0)")")
 USER_NAME=${USER}
@@ -35,8 +35,9 @@ run_image() {
   RUN_CMD=(docker run -it \
   --hostname "${USER_NAME}" \
   --rm \
-  --user="${USER_UID}:${USER_GID}"
-  --volume="${PROJECT_DIR}:${PROJECT_DIR}:rw" \
+  --user="${USER_UID}:${USER_GID}" \
+  --volume="${HOME}/.ssh:${HOME}/.ssh" \
+  --volume="${PROJECT_DIR}:${PROJECT_DIR}" \
   --network=bridge \
   --workdir="${PROJECT_DIR}" \
   "${DOCKER_IMAGE_NAME}" /bin/bash)
