@@ -35,5 +35,13 @@
     "spdlog",
     "mosquitto",
     "libsigcpp"
-  ]
+  ],
+  "features": {
+    "tests": {
+      "description": "Tests supporting",
+      "dependencies": [
+        "gtest"
+      ]
+    }
+  }
 }
