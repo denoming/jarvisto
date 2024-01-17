@@ -345,70 +345,70 @@ MqttBasicClient::MqttBasicClient(const char* id, bool cleanSession, bool getLogs
 MqttBasicClient::~MqttBasicClient() = default;
 
 bool
-MqttBasicClient::hasConnection()
+MqttBasicClient::doHasConnection()
 {
     BOOST_ASSERT(_impl);
     return _impl->hasConnection();
 }
 
 std::error_code
-MqttBasicClient::credentials(std::string_view user, std::string_view password)
+MqttBasicClient::doCredentials(std::string_view user, std::string_view password)
 {
     BOOST_ASSERT(_impl);
     return _impl->credentials(user, password);
 }
 
 std::error_code
-MqttBasicClient::connect(std::string_view host, uint16_t port, int keepAlive)
+MqttBasicClient::doConnect(std::string_view host, uint16_t port, int keepAlive)
 {
     BOOST_ASSERT(_impl);
     return _impl->connect(host, port, keepAlive);
 }
 
 std::error_code
-MqttBasicClient::connectAsync(std::string_view host, uint16_t port, int keepAlive)
+MqttBasicClient::doConnectAsync(std::string_view host, uint16_t port, int keepAlive)
 {
     BOOST_ASSERT(_impl);
     return _impl->connectAsync(host, port, keepAlive);
 }
 
 std::error_code
-MqttBasicClient::reconnect()
+MqttBasicClient::doReconnect()
 {
     BOOST_ASSERT(_impl);
     return _impl->reconnect();
 }
 
 std::error_code
-MqttBasicClient::reconnectAsync()
+MqttBasicClient::doReconnectAsync()
 {
     BOOST_ASSERT(_impl);
     return _impl->reconnectAsync();
 }
 
 std::error_code
-MqttBasicClient::disconnect()
+MqttBasicClient::doDisconnect()
 {
     BOOST_ASSERT(_impl);
     return _impl->disconnect();
 }
 
 std::expected<int, std::error_code>
-MqttBasicClient::subscribe(std::string_view topic, MqttQoS qos)
+MqttBasicClient::doSubscribe(std::string_view topic, MqttQoS qos)
 {
     BOOST_ASSERT(_impl);
     return _impl->subscribe(topic, qos);
 }
 
 std::expected<int, std::error_code>
-MqttBasicClient::unsubscribe(std::string_view topic)
+MqttBasicClient::doUnsubscribe(std::string_view topic)
 {
     BOOST_ASSERT(_impl);
     return _impl->unsubscribe(topic);
 }
 
 std::expected<int, std::error_code>
-MqttBasicClient::publish(
+MqttBasicClient::doPublish(
     std::string_view topic, const void* payload, std::size_t size, MqttQoS qos, bool retain)
 {
     BOOST_ASSERT(_impl);
@@ -416,7 +416,10 @@ MqttBasicClient::publish(
 }
 
 std::expected<int, std::error_code>
-MqttBasicClient::publish(std::string_view topic, std::string_view payload, MqttQoS qos, bool retain)
+MqttBasicClient::doPublish(std::string_view topic,
+                           std::string_view payload,
+                           MqttQoS qos,
+                           bool retain)
 {
     BOOST_ASSERT(_impl);
     return _impl->publish(topic, payload, qos, retain);

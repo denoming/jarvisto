@@ -1,6 +1,7 @@
 #pragma once
 
 #include "jarvisto/Mqtt.hpp"
+#include "jarvisto/Types.hpp"
 
 #include <fmt/format.h>
 #include <fmt/std.h>
@@ -77,6 +78,28 @@ struct fmt::formatter<jar::MqttErrorCode> : fmt::formatter<std::string_view> {
             break;
         case QosNotSupported:
             output = "QosNotSupported";
+            break;
+        default:
+            break;
+        }
+        return formatter<std::string_view>::format(output, context);
+    }
+};
+
+template<>
+struct fmt::formatter<jar::AvailabilityState> : fmt::formatter<std::string_view> {
+    template<typename FormatContext>
+    auto
+    format(jar::AvailabilityState state, FormatContext& context) const
+    {
+        std::string_view output{"Unknown"};
+        switch (state) {
+            using enum jar::AvailabilityState;
+        case Online:
+            output = "Online";
+            break;
+        case Offline:
+            output = "Offline";
             break;
         default:
             break;

@@ -36,7 +36,11 @@ target_sources(${TARGET}
         src/DateTime.cpp
         src/Timestamp.cpp
         src/Mqtt.cpp
+        src/MqttClient.cpp
         src/MqttBasicClient.cpp
+        src/AvailabilityObserver.cpp
+        src/AvailabilityPublisher.cpp
+        src/AvailabilitySubject.cpp
 )
 
 target_include_directories(${TARGET}

@@ -5,6 +5,8 @@ add_library(Jarvisto::Test::Common ALIAS ${TARGET})
 
 target_sources(${TARGET}
     PRIVATE src/TestMain.cpp
+            src/MockMqttClient.cpp
+            src/MockAvailabilitySubject.cpp
 )
 
 target_include_directories(${TARGET}
