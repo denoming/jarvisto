@@ -10,26 +10,26 @@
     "automotive-dlt",
     {
       "name": "boost-core",
-      "version>=": "1.81.0"
+      "version>=": "1.85.0"
     },
     {
       "name": "boost-asio",
-      "version>=": "1.81.0",
+      "version>=": "1.85.0",
       "features": [
         "ssl"
       ]
     },
     {
       "name": "boost-beast",
-      "version>=": "1.81.0"
+      "version>=": "1.85.0"
     },
     {
       "name": "boost-program-options",
-      "version>=": "1.81.0"
+      "version>=": "1.85.0"
     },
     {
       "name": "boost-url",
-      "version>=": "1.81.0"
+      "version>=": "1.85.0"
     },
     "date",
     "spdlog",
