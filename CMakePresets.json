@@ -25,41 +25,67 @@
     },
     {
       "name": "debug-docker",
-      "inherits": ["debug"],
+      "inherits": ["dc-debug"],
       "binaryDir": "build-debug-docker",
       "displayName": "Debug [Docker]"
     },
     {
       "name": "release-docker",
-      "inherits": ["release"],
+      "inherits": ["dc-release"],
       "binaryDir": "build-release-docker",
       "displayName": "Release [Docker]"
     }
   ],
   "buildPresets": [
     {
-      "name": "build-debug",
+      "name": "debug",
       "displayName": "Build [Debug]",
       "configurePreset": "debug",
       "jobs": 0
     },
     {
-      "name": "build-release",
+      "name": "release",
       "displayName": "Build [Release]",
       "configurePreset": "release",
       "jobs": 0
     },
     {
-      "name": "build-debug-docker",
+      "name": "debug-docker",
       "displayName": "Build [Debug]",
       "configurePreset": "debug-docker",
       "jobs": 0
     },
     {
-      "name": "build-release-docker",
+      "name": "release-docker",
       "displayName": "Build [Release]",
       "configurePreset": "release-docker",
       "jobs": 0
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "debug",
+      "displayName": "Create debug packages",
+      "configurePreset": "debug",
+      "generators": ["DEB"]
+    },
+    {
+      "name": "release",
+      "displayName": "Create release packages",
+      "configurePreset": "release",
+      "generators": ["DEB"]
+    },
+    {
+      "name": "debug-docker",
+      "displayName": "Create debug packages (docker)",
+      "inherits": ["debug"],
+      "configurePreset": "debug-docker"
+    },
+    {
+      "name": "release-docker",
+      "displayName": "Create release packages (docker)",
+      "inherits": ["release"],
+      "configurePreset": "release-docker"
     }
   ],
   "testPresets": [

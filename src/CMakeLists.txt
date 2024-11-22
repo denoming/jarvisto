@@ -2,17 +2,15 @@ include(GNUInstallDirs)
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 
-set(TARGET jarvisto)
+add_library(jarvisto SHARED)
+add_library(Jarvisto::Jarvisto ALIAS jarvisto)
 
-add_library(${TARGET} SHARED)
-add_library(Jarvisto::Jarvisto ALIAS ${TARGET})
-
-set_target_properties(${TARGET}
+set_target_properties(jarvisto
     PROPERTIES
         EXPORT_NAME Jarvisto
 )
 
-set_target_properties(${TARGET}
+set_target_properties(jarvisto
     PROPERTIES
         VERSION ${PROJECT_VERSION}
         SOVERSION ${PROJECT_VERSION_MAJOR}
@@ -21,36 +19,35 @@ set_target_properties(${TARGET}
         INTERFACE_FLOAT_SUPPORT YES
 )
 
-target_sources(${TARGET}
-    PRIVATE
-        src/Subsystem.cpp
-        src/Application.cpp
-        src/LoggerInitializer.cpp
-        src/SecureContext.cpp
-        src/Worker.cpp
-        src/WorkerGroup.cpp
-        src/Http.cpp
-        src/Cancellable.cpp
-        src/HttpRequest.cpp
-        src/Utils.cpp
-        src/DateTime.cpp
-        src/Timestamp.cpp
-        src/Mqtt.cpp
-        src/MqttClient.cpp
-        src/MqttBasicClient.cpp
-        src/AvailabilityObserver.cpp
-        src/AvailabilityPublisher.cpp
-        src/AvailabilitySubject.cpp
+target_sources(jarvisto
+    PRIVATE src/Subsystem.cpp
+            src/Application.cpp
+            src/LoggerInitializer.cpp
+            src/SecureContext.cpp
+            src/Worker.cpp
+            src/WorkerGroup.cpp
+            src/Http.cpp
+            src/Cancellable.cpp
+            src/HttpRequest.cpp
+            src/Utils.cpp
+            src/DateTime.cpp
+            src/Timestamp.cpp
+            src/Mqtt.cpp
+            src/MqttClient.cpp
+            src/MqttBasicClient.cpp
+            src/AvailabilityObserver.cpp
+            src/AvailabilityPublisher.cpp
+            src/AvailabilitySubject.cpp
 )
 
-target_include_directories(${TARGET}
+target_include_directories(jarvisto
     PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
             $<BUILD_INTERFACE:${CMAKE_RUNTIME_OUTPUT_DIRECTORY}>
 )
 
-target_link_libraries(${TARGET}
+target_link_libraries(jarvisto
     PUBLIC spdlog::spdlog
            Boost::headers
            Boost::program_options
@@ -65,88 +62,46 @@ target_link_libraries(${TARGET}
 
 target_compile_features(jarvisto PUBLIC cxx_std_23)
 
-target_compile_definitions(${TARGET}
+target_compile_definitions(jarvisto
     PUBLIC SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG
 )
 
-# Generate export header file with export macros
-generate_export_header(${TARGET}
+generate_export_header(jarvisto
     BASE_NAME JARVISTO
     EXPORT_FILE_NAME jarvisto/Export.hpp
 )
 
-# Install target files except namelink file
-install(TARGETS ${TARGET}
-    EXPORT JarvistoRuntime
+install(TARGETS jarvisto
+    EXPORT JarvistoTargets
     LIBRARY
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT JarvistoRuntime
-        NAMELINK_SKIP
+        COMPONENT Jarvisto_Lib
+        NAMELINK_COMPONENT Jarvisto_DevLib
+    FILE_SET HEADERS
+)
+
+install(TARGETS jarvisto
+    FILE_SET HEADERS
+    COMPONENT Jarvisto_DevLib
     INCLUDES
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# Install target namelink file
-install(TARGETS ${TARGET}
-    EXPORT JarvistoDevelopment
-    LIBRARY
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT JarvistoDevelopment
-        NAMELINK_ONLY
-    ARCHIVE
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        COMPONENT JarvistoDevelopment
-)
-
-# Install package config file
-install(EXPORT JarvistoRuntime
+install(EXPORT JarvistoTargets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
     NAMESPACE Jarvisto::
-    COMPONENT JarvistoRuntime
-    FILE JarvistoRuntime.cmake
+    COMPONENT Jarvisto_DevLib
+    FILE JarvistoTargets.cmake
 )
 
-# Install package config file
-install(EXPORT JarvistoDevelopment
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
-    NAMESPACE Jarvisto::
-    COMPONENT JarvistoDevelopment
-    FILE JarvistoDevelopment.cmake
-)
-
-# Install library header files
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
-    TYPE INCLUDE
-    COMPONENT JarvistoDevelopment
-    FILES_MATCHING
+        TYPE INCLUDE
+        COMPONENT Jarvisto_DevLib
+        FILES_MATCHING
         PATTERN *.hpp
 )
 
-# Install export header file
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jarvisto/Export.hpp
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/jarvisto
-    COMPONENT JarvistoDevelopment
-)
-
-# Generate package config and version file
-configure_package_config_file(
-    ${PROJECT_SOURCE_DIR}/config/cmake/JarvistoConfig.cmake.in JarvistoConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
-    NO_SET_AND_CHECK_MACRO
-    NO_CHECK_REQUIRED_COMPONENTS_MACRO
-)
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/JarvistoConfigVersion.cmake
-    COMPATIBILITY SameMajorVersion
-)
-
-# Install package config and version file
-install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/JarvistoConfig.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
-    COMPONENT JarvistoDevelopment
-)
-install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/JarvistoConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
-    COMPONENT JarvistoDevelopment
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/jarvisto
+        COMPONENT Jarvisto_DevLib
 )

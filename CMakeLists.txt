@@ -8,7 +8,12 @@ project(jarvisto
 )
 
 include(cmake/ProjectConfigs.cmake)
-include(cmake/ProjectInstall.cmake)
+if (PROJECT_IS_TOP_LEVEL)
+    include(cmake/ProjectInstall.cmake)
+endif()
+if (PROJECT_IS_TOP_LEVEL)
+    include(cmake/ProjectPackaging.cmake)
+endif()
 
 add_subdirectory(config)
 add_subdirectory(src)
