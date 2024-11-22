@@ -1,9 +1,6 @@
 #include "jarvisto/LoggerInitializer.hpp"
 
 #include "jarvisto/Options.hpp"
-#ifdef ENABLE_DLT
-#include "common/LoggerDltSink.hpp"
-#endif
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -66,21 +63,6 @@ addConsoleSink()
     spdlog::default_logger()->sinks().push_back(sink);
 }
 
-#ifdef ENABLE_DLT
-void
-addDltSink(const char* appId, const char* appDesc, const char* ctxId, const char* ctxDesc)
-{
-    static constexpr const char* kFormat{"[%P:%t] [%L] [%*] %v"};
-    auto formatter = std::make_unique<spdlog::pattern_formatter>();
-    formatter->add_flag<ShortFilenameAndLine>('*').set_pattern(kFormat);
-
-    const auto sink = std::make_shared<LoggerDltSink>(appId, appDesc, ctxId, ctxDesc);
-    sink->set_level(spdlog::level::debug);
-    sink->set_formatter(std::move(formatter));
-    spdlog::default_logger()->sinks().push_back(sink);
-}
-#endif
-
 } // namespace
 
 LoggerInitializer&
@@ -109,9 +91,6 @@ LoggerInitializer::initialize(const char* appId,
     if (!_initialized) {
         setupDefaultLogger();
         addConsoleSink();
-#ifdef ENABLE_DLT
-        addDltSink(appId, appDesc, ctxId, ctxDesc);
-#endif
         _initialized = true;
     }
 }

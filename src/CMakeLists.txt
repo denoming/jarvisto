@@ -63,12 +63,7 @@ target_link_libraries(${TARGET}
             OpenSSL::Crypto
 )
 
-if (ENABLE_DLT)
-    target_sources(${TARGET} PRIVATE src/LoggerDltSink.cpp)
-    target_link_libraries(${TARGET} PRIVATE Genivi::dlt)
-endif()
-
-target_compile_features(${TARGET} PUBLIC cxx_std_23)
+target_compile_features(jarvisto PUBLIC cxx_std_23)
 
 target_compile_definitions(${TARGET}
     PUBLIC SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG

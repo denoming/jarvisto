@@ -7,8 +7,7 @@
   ],
   "supports": "linux and !windows",
   "dependencies": [
-    "automotive-dlt",
-    "boost-core",
+     "boost-core",
     {
       "name": "boost-asio",
       "features": [

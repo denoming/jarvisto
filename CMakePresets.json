@@ -15,21 +15,13 @@
       "name": "debug",
       "inherits": ["dc-debug-vcpkg"],
       "binaryDir": "build-debug",
-      "displayName": "Debug",
-      "cacheVariables": {
-        "ENABLE_DLT": true,
-        "ENABLE_TESTS": true
-      }
+      "displayName": "Debug"
     },
     {
       "name": "release",
       "inherits": ["dc-release-vcpkg"],
       "binaryDir": "build-release",
-      "displayName": "Release",
-      "cacheVariables": {
-        "ENABLE_DLT": true,
-        "ENABLE_TESTS": true
-      }
+      "displayName": "Release"
     },
     {
       "name": "debug-docker",
