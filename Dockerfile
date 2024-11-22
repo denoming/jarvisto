@@ -1,31 +1,32 @@
-FROM python:3.12-bookworm
+# syntax=docker/dockerfile:1
 
-ARG UNAME=dev
-ARG UID=1000
-ARG GID=1000
+ARG PLATFORM=arm64v8
+FROM $PLATFORM/debian:bookworm
 
-ENV VCPKG_ROOT="/home/$UNAME/.vcpkg"
+ARG USER_NAME=bender
+ARG USER_UID=1000
+ARG USER_GID=1000
+
+ENV VCPKG_ROOT="/home/$USER_NAME/.vcpkg"
+ENV VCPKG_FORCE_SYSTEM_BINARIES=true
+ENV VCPKG_DISABLE_METRICS=true
 
 USER root
 
-RUN apt update && \
-    apt install -y build-essential autoconf automake autopoint git cmake ninja-build curl tar zip unzip \
-                   sudo flex bison nasm texinfo \
-                   python3-jinja2
+RUN apt update \
+ && apt install -y build-essential autoconf automake autopoint sudo vim git \
+                   cmake ninja-build gdb curl tar zip unzip sudo dbus flex \
+                   bison nasm texinfo wget file pkg-config libtool \
+                   python3 libmosquitto-dev libmosquittopp-dev libssl-dev \
+                   libboost1.81-dev libboost-program-options1.81-dev libboost-url1.81-dev \
+                   libspdlog-dev libhowardhinnant-date-dev libsigc++-3.0-dev
 
-# Create default user
-RUN groupadd -f -g $GID $UNAME
-RUN useradd -l -g $GID --uid $UID -ms /bin/bash $UNAME
-RUN echo $UNAME:$UNAME | chpasswd
-RUN echo $UNAME 'ALL=(ALL) NOPASSWD:SETENV: ALL' > /etc/sudoers.d/$UNAME || true
+# Create custom user
+RUN groupadd -f -g $USER_GID $USER_NAME \
+ && useradd -l -g $USER_GID -G sudo --uid $USER_UID -ms /bin/bash $USER_NAME \
+ && echo $USER_NAME:$USER_NAME | chpasswd \
+ && echo $USER_NAME 'ALL=(ALL) NOPASSWD:SETENV: ALL' > /etc/sudoers.d/010_$USER_NAME || true
 
-USER $UNAME
+USER $USER_NAME
 
-RUN pip install Jinja2
-
-RUN git clone https://github.com/Microsoft/vcpkg.git $HOME/.vcpkg && \
-    bash $HOME/.vcpkg/bootstrap-vcpkg.sh && \
-    mkdir -p $HOME/.local/bin && \
-    ln -s $HOME/.vcpkg/vcpkg $HOME/.local/bin/vcpkg
-
-CMD bash --rcfile "$HOME/.profile"
+CMD ["/bin/bash","--rcfile","$HOME/.profile"]
