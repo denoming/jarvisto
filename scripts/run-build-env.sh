@@ -10,8 +10,8 @@ PLATFORM_VARIANT="${2:-v8}"
 USER_NAME="${3:-$(whoami)}"
 
 # Define variables
-USER_UID="$(id ${USERNAME} -u)"
-USER_GID="$(id ${USERNAME} -g)"
+USER_UID="$(id ${USER_NAME} -u)"
+USER_GID="$(id ${USER_NAME} -g)"
 PLATFORM="${PLATFORM_ARCH}${PLATFORM_VARIANT}"
 IMAGE_NAME="my/jarvisto:${PLATFORM_ARCH}${PLATFORM_VARIANT}"
 
@@ -52,10 +52,10 @@ run_image() {
   RUN_CMD=(docker run -it \
   --platform "linux/${PLATFORM_ARCH}/${PLATFORM_VARIANT}" \
   --rm \
-  #--user "${USER_UID}:${USER_GID}" \
+  --user "${USER_UID}:${USER_GID}" \
   --volume "${HOME}/.ssh:${HOME}/.ssh" \
   --volume "${PROJECT_ROOT}:${PROJECT_ROOT}" \
-  --network host \
+  --network "host" \
   --workdir "${PROJECT_ROOT}" \
   "${IMAGE_NAME}")
 
