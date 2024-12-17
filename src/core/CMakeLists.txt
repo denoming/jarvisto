@@ -26,6 +26,7 @@ target_sources(jarvisto-core
             src/Environment.cpp
             src/DateTime.cpp
             src/Timestamp.cpp
+            src/SignalHandler.cpp
 )
 
 target_include_directories(jarvisto-core

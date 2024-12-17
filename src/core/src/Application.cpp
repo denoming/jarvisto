@@ -2,11 +2,6 @@
 
 #include "jarvisto/core/Logger.hpp"
 
-#include <boost/asio/io_context.hpp>
-#include <boost/asio/signal_set.hpp>
-
-namespace asio = boost::asio;
-
 namespace jar {
 
 Application* Application::s_instance{nullptr};
@@ -60,9 +55,6 @@ Application::run()
 void
 Application::proceed()
 {
-    if (not waitForTermination()) {
-        LOGE("Waiting for termination has failed");
-    }
 }
 
 void
@@ -74,20 +66,6 @@ bool
 Application::processOptions(int argc, char* argv[])
 {
     return true;
-}
-
-bool
-Application::waitForTermination()
-{
-    asio::io_context context;
-    asio::signal_set signals(context, SIGINT, SIGTERM);
-    signals.async_wait([this, &context](const auto& /*error*/, int signal) {
-        if (!context.stopped()) {
-            LOGD("Terminate <{}> application by <{}> signal", name(), signal);
-            context.stop();
-        }
-    });
-    return (context.run() > 0);
 }
 
 void

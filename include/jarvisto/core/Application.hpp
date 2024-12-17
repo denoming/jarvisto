@@ -33,9 +33,6 @@ protected:
     [[nodiscard]] virtual bool
     processOptions(int argc, char* argv[]);
 
-    bool
-    waitForTermination();
-
     void
     addSubsystem(std::unique_ptr<Subsystem> subsystem);
 

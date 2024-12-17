@@ -7,7 +7,6 @@
   ],
   "supports": "linux and !windows",
   "dependencies": [
-    "boost-core",
     "date",
     "spdlog"
   ],
