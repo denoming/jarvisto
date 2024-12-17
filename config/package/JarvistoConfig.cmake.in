@@ -7,11 +7,39 @@ cmake_minimum_required(VERSION 3.25.1)
 
 @PACKAGE_INIT@
 
-include(CMakeFindDependencyMacro)
-find_dependency(Boost COMPONENTS program_options url)
-find_dependency(date)
-find_dependency(spdlog)
-find_dependency(PkgConfig)
-pkg_check_modules(SigCpp REQUIRED IMPORTED_TARGET sigc++-3.0)
+# Work out the set of components to load by default
+if(${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+    set(comps ${${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS})
+else()
+    set(comps Core)
+endif()
+set(${CMAKE_FIND_PACKAGE_NAME}_comps ${comps})
 
-include("${CMAKE_CURRENT_LIST_DIR}/JarvistoTargets.cmake")
+# Find external dependencies
+set(${CMAKE_FIND_PACKAGE_NAME}_comps ${comps})
+include(CMakeFindDependencyMacro)
+
+# Check all required components are available before loading any
+foreach(comp IN LISTS {${CMAKE_FIND_PACKAGE_NAME}_comps)
+    set(compFile ${CMAKE_CURRENT_LIST_DIR}/Jarvisto${comp}Targets.cmake)
+    if(${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_${comp} AND NOT EXISTS ${compFile})
+        set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "Jarvisto missing required component: ${comp}")
+        set(${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
+        return()
+    endif()
+endforeach()
+
+# Include components config file
+foreach(comp IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_comps)
+    include(${CMAKE_CURRENT_LIST_DIR}/Jarvisto${comp}Targets.cmake OPTIONAL)
+    if (${comp} STREQUAL "Core")
+        find_dependency(Boost COMPONENTS program_options OPTIONAL_COMPONENTS url CONFIG)
+        find_dependency(date)
+        find_dependency(spdlog)
+    endif()
+    if (${comp} STREQUAL "Core")
+        find_dependency(Boost COMPONENTS url CONFIG)
+        find_dependency(PkgConfig)
+        pkg_check_modules(SigCpp REQUIRED IMPORTED_TARGET sigc++-3.0)
+    endif()
+endforeach()

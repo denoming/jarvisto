@@ -17,6 +17,4 @@ endif()
 
 add_subdirectory(config)
 add_subdirectory(src)
-if(ENABLE_TESTS)
-    add_subdirectory(test)
-endif()
+add_subdirectory(tools)

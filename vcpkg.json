@@ -7,22 +7,27 @@
   ],
   "supports": "linux and !windows",
   "dependencies": [
-     "boost-core",
-    {
-      "name": "boost-asio",
-      "features": [
-        "ssl"
-      ]
-    },
-    "boost-beast",
+    "boost-core",
     "boost-program-options",
-    "boost-url",
     "date",
-    "spdlog",
-    "mosquitto",
-    "libsigcpp"
+    "spdlog"
   ],
   "features": {
+    "network": {
+      "description": "Network supporting",
+      "dependencies": [
+        {
+          "name": "boost-asio",
+          "features": [
+            "ssl"
+          ]
+        },
+        "boost-beast",
+        "boost-url",
+        "mosquitto",
+        "libsigcpp"
+      ]
+    },
     "tests": {
       "description": "Tests supporting",
       "dependencies": [

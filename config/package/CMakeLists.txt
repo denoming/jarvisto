@@ -22,7 +22,7 @@ install(
 )
 
 install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/JarvistoConfig.cmake
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/JarvistoConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jarvisto
     COMPONENT Jarvisto_DevLib
 )

@@ -15,25 +15,37 @@
       "name": "debug",
       "inherits": ["dc-debug-vcpkg"],
       "binaryDir": "build-debug",
-      "displayName": "Debug"
+      "displayName": "Debug",
+      "cacheVariables": {
+        "ENABLE_NETWORK_COMPONENT": true
+      }
     },
     {
       "name": "release",
       "inherits": ["dc-release-vcpkg"],
       "binaryDir": "build-release",
-      "displayName": "Release"
+      "displayName": "Release",
+      "cacheVariables": {
+        "ENABLE_NETWORK_COMPONENT": true
+       }
     },
     {
       "name": "debug-docker",
       "inherits": ["dc-debug"],
       "binaryDir": "build-debug-docker",
-      "displayName": "Debug [Docker]"
+      "displayName": "Debug [Docker]",
+      "cacheVariables": {
+        "ENABLE_NETWORK_COMPONENT": true
+      }
     },
     {
       "name": "release-docker",
       "inherits": ["dc-release"],
       "binaryDir": "build-release-docker",
-      "displayName": "Release [Docker]"
+      "displayName": "Release [Docker]",
+      "cacheVariables": {
+        "ENABLE_NETWORK_COMPONENT": true
+      }
     }
   ],
   "buildPresets": [

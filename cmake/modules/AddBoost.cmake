@@ -1,6 +1,11 @@
-set(Boost_NO_WARN_NEW_VERSIONS ON)
-set(Boost_NO_BOOST_CMAKE ON)
+set(comp "program_options")
+if (ENABLE_NETWORK_COMPONENT)
+    list(APPEND comp "url")
+endif()
+
 find_package(Boost 1.81.0
     REQUIRED
-    COMPONENTS program_options url
+    COMPONENTS ${comp}
     CONFIG)
+
+unset(comp)
