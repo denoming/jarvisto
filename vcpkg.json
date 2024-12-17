@@ -8,7 +8,6 @@
   "supports": "linux and !windows",
   "dependencies": [
     "boost-core",
-    "boost-program-options",
     "date",
     "spdlog"
   ],

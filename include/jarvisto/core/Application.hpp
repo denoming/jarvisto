@@ -3,9 +3,8 @@
 #include "jarvisto/core/Subsystem.hpp"
 #include "jarvisto/core/Export.hpp"
 
-#include <boost/program_options.hpp>
-
 #include <vector>
+#include <memory>
 
 namespace jar {
 
@@ -16,14 +15,11 @@ public:
 
     ~Application() override;
 
-    void
+    [[nodiscard]] bool
     parseArgs(int argc, char* argv[]);
 
-    int
+    [[nodiscard]] int
     run();
-
-    [[nodiscard]] const boost::program_options::variables_map&
-    options() const;
 
 protected:
     Application();
@@ -32,7 +28,10 @@ protected:
     proceed();
 
     virtual void
-    defineOptions(boost::program_options::options_description& description);
+    defineOptions();
+
+    [[nodiscard]] virtual bool
+    processOptions(int argc, char* argv[]);
 
     bool
     waitForTermination();
@@ -54,18 +53,12 @@ protected:
 
 private:
     void
-    processOptions(int argc, char* argv[]);
-
-    void
-    handleHelp(const boost::program_options::options_description& description);
+    handleHelp();
 
 private:
     using Subsystems = std::vector<std::unique_ptr<Subsystem>>;
-
     Subsystems _subsystems;
-    boost::program_options::variables_map _options;
     bool _helpRequested;
-
     static Application* s_instance;
 };
 
@@ -75,11 +68,11 @@ private:
     int main(int argn, char* argv[])                                                               \
     {                                                                                              \
         try {                                                                                      \
-            ServiceName service;                                                                   \
-            service.parseArgs(argn, argv);                                                         \
-            service.run();                                                                         \
+            if (ServiceName service; service.parseArgs(argn, argv)) {                              \
+                return service.run();                                                              \
+            }                                                                                      \
         } catch (...) {                                                                            \
-            return EXIT_FAILURE;                                                                   \
+            /* Suppress any unhandled exceptions */                                                \
         }                                                                                          \
-        return EXIT_SUCCESS;                                                                       \
+        return EXIT_FAILURE;                                                                       \
     }

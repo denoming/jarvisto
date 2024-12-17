@@ -1,11 +1,11 @@
-set(comp "program_options")
+set(comps "")
 if (ENABLE_NETWORK_COMPONENT)
-    list(APPEND comp "url")
+    list(APPEND comps "url")
 endif()
 
-find_package(Boost 1.81.0
+find_package(Boost
     REQUIRED
-    COMPONENTS ${comp}
+    COMPONENTS ${comps}
     CONFIG)
 
-unset(comp)
+unset(comps)

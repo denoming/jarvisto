@@ -5,11 +5,7 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/signal_set.hpp>
 
-#include <iostream>
-
 namespace asio = boost::asio;
-namespace sys = boost::system;
-namespace po = boost::program_options;
 
 namespace jar {
 
@@ -33,10 +29,11 @@ Application::~Application()
     s_instance = nullptr;
 }
 
-void
-Application::parseArgs(int argc, char* argv[])
+bool
+Application::parseArgs(const int argc, char* argv[])
 {
-    processOptions(argc, argv);
+    defineOptions();
+    return processOptions(argc, argv);
 }
 
 int
@@ -56,34 +53,34 @@ Application::run()
         return EXIT_FAILURE;
     }
     finalize();
-    return EXIT_SUCCESS;
-}
 
-const po::variables_map&
-Application::options() const
-{
-    return _options;
+    return EXIT_SUCCESS;
 }
 
 void
 Application::proceed()
 {
-    if (!waitForTermination()) {
+    if (not waitForTermination()) {
         LOGE("Waiting for termination has failed");
     }
 }
 
 void
-Application::defineOptions(po::options_description& description)
+Application::defineOptions()
 {
-    description.add_options()("help,h", "Display help");
+}
+
+bool
+Application::processOptions(int argc, char* argv[])
+{
+    return true;
 }
 
 bool
 Application::waitForTermination()
 {
     asio::io_context context;
-    boost::asio::signal_set signals(context, SIGINT, SIGTERM);
+    asio::signal_set signals(context, SIGINT, SIGTERM);
     signals.async_wait([this, &context](const auto& /*error*/, int signal) {
         if (!context.stopped()) {
             LOGD("Terminate <{}> application by <{}> signal", name(), signal);
@@ -102,7 +99,7 @@ Application::addSubsystem(std::unique_ptr<Subsystem> subsystem)
 void
 Application::initialize(Application& application)
 {
-    for (auto& subsystem : _subsystems) {
+    for (const auto& subsystem : _subsystems) {
         subsystem->initialize(*this);
     }
 }
@@ -110,7 +107,7 @@ Application::initialize(Application& application)
 void
 Application::setUp(Application& application)
 {
-    for (auto& subsystem : _subsystems) {
+    for (const auto& subsystem : _subsystems) {
         subsystem->setUp(*this);
     }
 }
@@ -118,7 +115,7 @@ Application::setUp(Application& application)
 void
 Application::tearDown()
 {
-    for (auto& subsystem : _subsystems) {
+    for (const auto& subsystem : _subsystems) {
         subsystem->tearDown();
     }
 }
@@ -126,29 +123,15 @@ Application::tearDown()
 void
 Application::finalize()
 {
-    for (auto& subsystem : _subsystems) {
+    for (const auto& subsystem : _subsystems) {
         subsystem->finalize();
     }
 }
 
 void
-Application::processOptions(int argc, char* argv[])
-{
-    po::options_description d{"Options"};
-    defineOptions(d);
-    po::store(po::parse_command_line(argc, argv, d), _options);
-    po::notify(_options);
-    if (_options.contains("help")) {
-        handleHelp(d);
-    }
-}
-
-void
-Application::handleHelp(const po::options_description& description)
+Application::handleHelp()
 {
     _helpRequested = true;
-
-    std::cout << description << std::endl;
 }
 
 } // namespace jar

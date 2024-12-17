@@ -37,7 +37,6 @@ target_include_directories(jarvisto-core
 target_link_libraries(jarvisto-core
     PUBLIC spdlog::spdlog
            Boost::headers
-           Boost::program_options
            date::date
            date::date-tz
 )
