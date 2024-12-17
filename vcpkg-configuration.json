@@ -9,7 +9,7 @@
       "kind": "git",
       "baseline": "fc13f96512236878d48ec35ae4ec3bb994677dd6",
       "repository": "git@github.com:denoming/vcpkg-registry.git",
-      "packages": [ "automotive-dlt", "mosquitto" ]
+      "packages": [ "mosquitto" ]
     }
   ]
 }

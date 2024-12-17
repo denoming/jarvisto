@@ -82,17 +82,4 @@ LoggerInitializer::initialize()
     }
 }
 
-void
-LoggerInitializer::initialize(const char* appId,
-                              const char* appDesc,
-                              const char* ctxId,
-                              const char* ctxDesc)
-{
-    if (!_initialized) {
-        setupDefaultLogger();
-        addConsoleSink();
-        _initialized = true;
-    }
-}
-
 } // namespace jar

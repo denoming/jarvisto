@@ -12,9 +12,6 @@ public:
     void
     initialize();
 
-    void
-    initialize(const char* appId, const char* appDesc, const char* ctxId, const char* ctxDesc);
-
 private:
     LoggerInitializer() = default;
 
