@@ -19,7 +19,8 @@ RUN apt update \
                    bison nasm texinfo wget file pkg-config libtool \
                    python3 libmosquitto-dev libmosquittopp-dev libssl-dev \
                    libboost1.81-dev libboost-program-options1.81-dev libboost-url1.81-dev \
-                   libspdlog-dev libhowardhinnant-date-dev libsigc++-3.0-dev
+                   libspdlog-dev libhowardhinnant-date-dev libsigc++-3.0-dev \
+                   libgtest-dev libgmock-dev nlohmann-json3-dev
 
 # Create custom user
 RUN groupadd -f -g $USER_GID $USER_NAME \
