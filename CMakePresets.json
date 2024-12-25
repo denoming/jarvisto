@@ -17,8 +17,7 @@
       "binaryDir": "build-debug",
       "displayName": "Debug",
       "cacheVariables": {
-        "ENABLE_NETWORK_COMPONENT": true,
-        "ENABLE_TESTS": true
+        "ENABLE_NETWORK_COMPONENT": true
       }
     },
     {
@@ -27,8 +26,7 @@
       "binaryDir": "build-release",
       "displayName": "Release",
       "cacheVariables": {
-        "ENABLE_NETWORK_COMPONENT": true,
-        "ENABLE_TESTS": false
+        "ENABLE_NETWORK_COMPONENT": true
        }
     },
     {
@@ -37,8 +35,7 @@
       "binaryDir": "build-debug-docker",
       "displayName": "Debug [Docker]",
       "cacheVariables": {
-        "ENABLE_NETWORK_COMPONENT": true,
-        "ENABLE_TESTS": true
+        "ENABLE_NETWORK_COMPONENT": true
       }
     },
     {
@@ -47,8 +44,7 @@
       "binaryDir": "build-release-docker",
       "displayName": "Release [Docker]",
       "cacheVariables": {
-        "ENABLE_NETWORK_COMPONENT": true,
-        "ENABLE_TESTS": false
+        "ENABLE_NETWORK_COMPONENT": true
       }
     }
   ],
