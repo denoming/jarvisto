@@ -38,9 +38,9 @@ target_include_directories(jarvisto-core
 
 target_link_libraries(jarvisto-core
     PUBLIC spdlog::spdlog
-           Boost::headers
            date::date
            date::date-tz
+           nlohmann_json::nlohmann_json
 )
 
 target_compile_features(jarvisto-core PUBLIC cxx_std_23)
