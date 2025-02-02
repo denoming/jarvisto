@@ -38,13 +38,14 @@ target_include_directories(jarvisto-core
     PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE $<BUILD_INTERFACE:${CMAKE_RUNTIME_OUTPUT_DIRECTORY}>
+            $<BUILD_INTERFACE:${MOSQUITTO_INCLUDE_DIRS}>
 )
 
 target_link_libraries(jarvisto-network
     PUBLIC Jarvisto::Core
            Boost::url
            PkgConfig::SigCpp
-    PRIVATE PkgConfig::Mosquitto
+    PRIVATE ${MOSQUITTO_LIBRARIES}
             OpenSSL::SSL
             OpenSSL::Crypto
 )

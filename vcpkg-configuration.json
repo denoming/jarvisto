@@ -3,13 +3,5 @@
     "kind": "git",
     "baseline": "1de2026f28ead93ff1773e6e680387643e914ea1",
     "repository": "https://github.com/microsoft/vcpkg"
-  },
-  "registries": [
-    {
-      "kind": "git",
-      "baseline": "fc13f96512236878d48ec35ae4ec3bb994677dd6",
-      "repository": "git@github.com:denoming/vcpkg-registry.git",
-      "packages": [ "mosquitto" ]
-    }
-  ]
+  }
 }
