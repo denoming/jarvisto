@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.25.1)
 include(cmake/ProjectOptions.cmake)
 
 project(jarvisto
-    VERSION 0.3.8
+    VERSION 0.3.9
     DESCRIPTION "Jarvisto Library"
 )
 
