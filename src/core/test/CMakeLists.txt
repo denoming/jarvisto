@@ -3,6 +3,7 @@ add_executable(jarvisto-core-test "")
 target_sources(jarvisto-core-test
     PRIVATE src/DateTimeTest.cpp
             src/ConfigTest.cpp
+        src/LoggerFactoryTest.cpp
 )
 
 target_link_libraries(jarvisto-core-test

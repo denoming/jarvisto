@@ -15,14 +15,12 @@ set_target_properties(jarvisto-core
         VERSION ${PROJECT_VERSION}
         SOVERSION ${PROJECT_VERSION_MAJOR}
         CXX_VISIBILITY_PRESET hidden
-        VISIBILITY_INLINES_HIDDEN YES
-        INTERFACE_FLOAT_SUPPORT YES
 )
 
 target_sources(jarvisto-core
     PRIVATE src/Subsystem.cpp
             src/Application.cpp
-            src/LoggerInitializer.cpp
+            src/LoggerFactory.cpp
             src/Environment.cpp
             src/DateTime.cpp
             src/Timestamp.cpp
