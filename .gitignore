@@ -44,29 +44,7 @@ target_wrapper.*
 CMakeLists.txt.user*
 
 # CLion user-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
-.idea/**/.gitignore
-.idea/**/codeStyles/
-.idea/**/*.iml
-.idea/**/misc.xml
-.idea/**/modules.xml
-.idea/**/vcs.xml
-
-# CLion generated files
-.idea/**/contentModel.xml
-
-# CLion sensitive or high-churn files
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
+.idea
 
 # CLion file-based project format
 *.iws
