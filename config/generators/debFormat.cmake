@@ -15,14 +15,13 @@ endif()
 
 # Set package dependencies
 string(CONCAT CPACK_DEBIAN_JARVISTO_LIB_PACKAGE_DEPENDS
-    "libspdlog1.10 (>= 1.10.0+ds),"
-    "libboost-program-options1.81.0 (>= 1.81.0),"
-    "libboost-url1.81.0 (>= 1.81.0),"
-    "libdate-tz3 (>= 3.0.1+ds),"
+    "libspdlog-dev (>= 1.10.0),"
+    "libboost-url1.81-dev (>= 1.81.0),"
+    "libhowardhinnant-date-dev (>= 3.0.1),"
+    "libsigc++-3.0-dev (>= 3.4.0),"
     "libmosquitto1 (>= 2.0.11),"
     "libmosquittopp1 (>= 2.0.11),"
-    "libssl3 (>= 3.0.15),"
-    "libsigc++-3.0-0 (>= 3.4.0)"
+    "libssl3 (>= 3.0.15)"
 )
 
 # Development package configuration

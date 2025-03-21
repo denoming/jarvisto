@@ -38,7 +38,7 @@ target_link_libraries(jarvisto-core
     PUBLIC spdlog::spdlog
            date::date
            date::date-tz
-           nlohmann_json::nlohmann_json
+    PRIVATE nlohmann_json::nlohmann_json
 )
 
 target_compile_features(jarvisto-core PUBLIC cxx_std_23)

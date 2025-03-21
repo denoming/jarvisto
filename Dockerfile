@@ -14,7 +14,7 @@ RUN apt update \
                    cmake ninja-build gdb curl tar zip unzip sudo dbus flex \
                    bison nasm texinfo wget file pkg-config libtool \
                    python3 libmosquitto-dev libmosquittopp-dev libssl-dev \
-                   libboost1.81-dev libboost-program-options1.81-dev libboost-url1.81-dev \
+                   libboost1.81-dev libboost-url1.81-dev \
                    libspdlog-dev libhowardhinnant-date-dev libsigc++-3.0-dev \
                    libgtest-dev libgmock-dev nlohmann-json3-dev
 
