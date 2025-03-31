@@ -5,6 +5,7 @@
 #include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/systemd_sink.h>
 
 #include <filesystem>
 
@@ -88,6 +89,18 @@ LoggerFactory::addFileSink(std::shared_ptr<spdlog::logger> logger /* NOLINT */,
                            const file_event_handlers& handlers)
 {
     auto sink = std::make_shared<sinks::basic_file_sink_mt>(fileName, truncate, handlers);
+    sink->set_level(static_cast<level::level_enum>(loggerLevel));
+    sink->set_formatter(getCustomPatternFormatter());
+    logger->sinks().push_back(std::move(sink));
+}
+
+static void
+addSystemdSink(std::shared_ptr<spdlog::logger> logger /* NOLINT */,
+               int loggerLevel,
+               std::string ident,
+               bool formatting)
+{
+    auto sink = std::make_shared<sinks::systemd_sink_mt>(std::move(ident), formatting);
     sink->set_level(static_cast<level::level_enum>(loggerLevel));
     sink->set_formatter(getCustomPatternFormatter());
     logger->sinks().push_back(std::move(sink));

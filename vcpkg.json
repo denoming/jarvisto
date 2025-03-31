@@ -9,7 +9,8 @@
   "dependencies": [
     "date",
     "spdlog",
-    "nlohmann-json"
+    "nlohmann-json",
+    "libsystemd"
   ],
   "features": {
     "network": {

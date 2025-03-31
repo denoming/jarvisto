@@ -29,6 +29,12 @@ protected:
                 bool truncate = false,
                 const spdlog::file_event_handlers& handlers = {});
 
+    static void
+    addSystemdSink(std::shared_ptr<spdlog::logger> logger,
+                   int loggerLevel = SPDLOG_LEVEL_DEBUG,
+                   std::string ident = "",
+                   bool formatting = false);
+
 private:
     virtual std::shared_ptr<spdlog::logger>
     createLogger(const std::string& loggerName, int loggerLevel, bool useByDefault);
