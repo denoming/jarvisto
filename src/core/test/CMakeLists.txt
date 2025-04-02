@@ -3,12 +3,12 @@ add_executable(jarvisto-core-test "")
 target_sources(jarvisto-core-test
     PRIVATE src/DateTimeTest.cpp
             src/ConfigTest.cpp
-        src/LoggerFactoryTest.cpp
+            src/LoggerFactoryTest.cpp
 )
 
 target_link_libraries(jarvisto-core-test
-    PRIVATE Jarvisto::Core
-            Jarvisto::Test
+    PRIVATE Jarvisto::Test
+            Jarvisto::Core
 )
 
 target_compile_features(jarvisto-core-test PUBLIC cxx_std_23)

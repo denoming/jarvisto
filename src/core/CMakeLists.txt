@@ -39,6 +39,7 @@ target_link_libraries(jarvisto-core
            date::date
            date::date-tz
     PRIVATE nlohmann_json::nlohmann_json
+            PkgConfig::Systemd
 )
 
 target_compile_features(jarvisto-core PUBLIC cxx_std_23)
