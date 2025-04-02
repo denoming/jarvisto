@@ -94,11 +94,11 @@ LoggerFactory::addFileSink(std::shared_ptr<spdlog::logger> logger /* NOLINT */,
     logger->sinks().push_back(std::move(sink));
 }
 
-static void
-addSystemdSink(std::shared_ptr<spdlog::logger> logger /* NOLINT */,
-               int loggerLevel,
-               std::string ident,
-               bool formatting)
+void
+LoggerFactory::addSystemdSink(std::shared_ptr<spdlog::logger> logger /* NOLINT */,
+                              int loggerLevel,
+                              std::string ident,
+                              bool formatting)
 {
     auto sink = std::make_shared<sinks::systemd_sink_mt>(std::move(ident), formatting);
     sink->set_level(static_cast<level::level_enum>(loggerLevel));

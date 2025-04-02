@@ -10,13 +10,6 @@ class JARVISTO_CORE_EXPORT LoggerFactory {
 public:
     virtual ~LoggerFactory() = default;
 
-    std::shared_ptr<spdlog::logger>
-    create(const std::string& loggerName, int loggerLevel, bool useByDefault = true);
-
-protected:
-    virtual void
-    addSinks(std::shared_ptr<spdlog::logger> logger, int logLevel);
-
     static void
     addConsoleSink(std::shared_ptr<spdlog::logger> logger,
                    int loggerLevel = SPDLOG_LEVEL_DEBUG,
@@ -34,6 +27,13 @@ protected:
                    int loggerLevel = SPDLOG_LEVEL_DEBUG,
                    std::string ident = "",
                    bool formatting = false);
+
+    std::shared_ptr<spdlog::logger>
+    create(const std::string& loggerName, int loggerLevel, bool useByDefault = true);
+
+protected:
+    virtual void
+    addSinks(std::shared_ptr<spdlog::logger> logger, int logLevel);
 
 private:
     virtual std::shared_ptr<spdlog::logger>
