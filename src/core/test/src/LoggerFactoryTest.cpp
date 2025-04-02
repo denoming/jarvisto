@@ -13,6 +13,7 @@ private:
     {
         addConsoleSink(logger, logLevel);
         addFileSink(logger, fs::current_path() / "log.txt");
+        addSystemdSink(logger, logLevel, "TEST");
     }
 };
 
