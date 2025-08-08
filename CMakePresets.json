@@ -17,6 +17,7 @@
       "binaryDir": "build-debug",
       "displayName": "Debug",
       "cacheVariables": {
+        "ENABLE_TESTS": true,
         "ENABLE_NETWORK_COMPONENT": true
       }
     },
@@ -35,6 +36,7 @@
       "binaryDir": "build-debug-docker",
       "displayName": "Debug [Docker]",
       "cacheVariables": {
+        "ENABLE_TESTS": true,
         "ENABLE_NETWORK_COMPONENT": true
       }
     },
