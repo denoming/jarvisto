@@ -10,18 +10,17 @@
 namespace jar {
 
 AvailabilityPublisher::AvailabilityPublisher(std::string name,
-                                             MqttClient& client,
+                                             IMqttClient& client,
                                              IAvailabilitySubject& subject)
     : _name{std::move(name)}
     , _client{client}
     , _state{subject.state()}
 {
 
-    std::ignore = subject.onStateUpdate(
-        sigc::track_obj([this](auto&& name, auto&& state) { onStateUpdate(name, state); }, this));
-
-    std::ignore = _client.onConnect(sigc::track_obj(
-        [this](const MqttReturnCode code) { onPublisherConnect(code == MqttReturnCode::Accepted); },
+    std::ignore = subject.onStateUpdate().connect(sigc::track_obj(
+        [this](const std::string& n, AvailabilityState s) { onStateUpdate(n, s); }, this));
+    std::ignore = _client.onConnect().connect(sigc::track_obj(
+        [this](const MqttReturnCode c) { onPublisherConnect(c == MqttReturnCode::Accepted); },
         this));
 
     if (_client.hasConnection()) {
@@ -33,7 +32,11 @@ void
 AvailabilityPublisher::publish()
 {
     static const std::string kPublishTopic = fmt::format("{}/state", _name);
-    if (auto rv = _client.publish(kPublishTopic, fmt::to_string(_state)); not rv) {
+    if (auto rv = _client.publish(kPublishTopic,
+                                  fmt::to_string(_state),
+                                  IMqttClient::kDefaultQos,
+                                  IMqttClient::kDefaultRetain);
+        not rv) {
         LOGE("Unable to publish <{}> state: {}", _state, rv.error().message());
     }
 }

@@ -6,120 +6,119 @@ namespace jar {
 
 MockMqttClient::MockMqttClient()
 {
-    ON_CALL(*this, doHasConnection).WillByDefault(Return(false));
+    ON_CALL(*this, hasConnection).WillByDefault(Return(false));
 
-    ON_CALL(*this, doCredentials)
+    ON_CALL(*this, credentials)
         .WillByDefault(Return(std::make_error_code(std::errc::not_supported)));
 
-    ON_CALL(*this, doConnect).WillByDefault(Return(std::make_error_code(std::errc::not_supported)));
+    ON_CALL(*this, connect).WillByDefault(Return(std::make_error_code(std::errc::not_supported)));
 
-    ON_CALL(*this, doConnectAsync)
+    ON_CALL(*this, connectAsync)
         .WillByDefault(Return(std::make_error_code(std::errc::not_supported)));
 
-    ON_CALL(*this, doReconnect)
+    ON_CALL(*this, reconnect).WillByDefault(Return(std::make_error_code(std::errc::not_supported)));
+
+    ON_CALL(*this, reconnectAsync)
         .WillByDefault(Return(std::make_error_code(std::errc::not_supported)));
 
-    ON_CALL(*this, doReconnectAsync)
+    ON_CALL(*this, disconnect)
         .WillByDefault(Return(std::make_error_code(std::errc::not_supported)));
 
-    ON_CALL(*this, doDisconnect)
-        .WillByDefault(Return(std::make_error_code(std::errc::not_supported)));
-
-    ON_CALL(*this, doSubscribe)
+    ON_CALL(*this, subscribe)
         .WillByDefault(Return(std::unexpected(std::make_error_code(std::errc::not_supported))));
 
-    ON_CALL(*this, doUnsubscribe)
+    ON_CALL(*this, unsubscribe)
         .WillByDefault(Return(std::unexpected(std::make_error_code(std::errc::not_supported))));
 
-    ON_CALL(*this, doPublish(_, _, _, _, _))
+    ON_CALL(*this, publish(_, _, _, _, _))
         .WillByDefault(Return(std::unexpected(std::make_error_code(std::errc::not_supported))));
 
-    ON_CALL(*this, doPublish(_, _, _, _))
+    ON_CALL(*this, publish(_, _, _, _))
         .WillByDefault(Return(std::unexpected(std::make_error_code(std::errc::not_supported))));
 }
 
 void
-MockMqttClient::triggerConnect(MqttReturnCode returnCode)
+MockMqttClient::triggerConnect(MqttReturnCode returnCode) const
 {
     _onConnectSig(returnCode);
 }
 
 void
-MockMqttClient::triggerDisconnect(MqttReturnCode returnCode)
+MockMqttClient::triggerDisconnect(MqttReturnCode returnCode) const
 {
     _onDisconnectSig(returnCode);
 }
 
 void
-MockMqttClient::triggerSubscribe(int mid)
+MockMqttClient::triggerSubscribe(int mid) const
 {
     _onSubscribeSig(mid);
 }
 
 void
-MockMqttClient::triggerUnsubscribe(int mid)
+MockMqttClient::triggerUnsubscribe(int mid) const
 {
     _onUnsubscribeSig(mid);
 }
 
 void
-MockMqttClient::triggerPublish(int mid)
+MockMqttClient::triggerPublish(int mid) const
 {
     _onPublishSig(mid);
 }
 
 void
-MockMqttClient::triggerMessage(int mid, std::string_view topic, void* payload, size_t size)
+MockMqttClient::triggerMessage(int mid, std::string_view topic, void* payload, size_t size) const
 {
     _onMessageSig(mid, topic, payload, size);
 }
 
 void
-MockMqttClient::triggerLog(int logLevel, std::string_view message)
+MockMqttClient::triggerLog(int logLevel, std::string_view message) const
 {
     _onLogSig(logLevel, message);
 }
 
-sigc::connection
-MockMqttClient::onConnect(OnConnectSignal::slot_type&& slot)
+MockMqttClient::OnConnectSignal
+MockMqttClient::onConnect() const
 {
-    return _onConnectSig.connect(std::move(slot));
+    return _onConnectSig;
 }
 
-sigc::connection
-MockMqttClient::onDisconnect(OnDisconnectSignal::slot_type&& slot)
+MockMqttClient::OnDisconnectSignal
+MockMqttClient::onDisconnect() const
 {
-    return _onDisconnectSig.connect(std::move(slot));
+    return _onDisconnectSig;
 }
 
-sigc::connection
-MockMqttClient::onSubscribe(OnSubscribeSignal::slot_type&& slot)
+MockMqttClient::OnSubscribeSignal
+MockMqttClient::onSubscribe() const
 {
-    return _onSubscribeSig.connect(std::move(slot));
+    return _onSubscribeSig;
 }
 
-sigc::connection
-MockMqttClient::onUnsubscribe(OnUnsubscribeSignal::slot_type&& slot)
+MockMqttClient::OnUnsubscribeSignal
+MockMqttClient::onUnsubscribe() const
 {
-    return _onUnsubscribeSig.connect(std::move(slot));
+    return _onUnsubscribeSig;
 }
 
-sigc::connection
-MockMqttClient::onPublish(OnPublishSignal::slot_type&& slot)
+MockMqttClient::OnPublishSignal
+MockMqttClient::onPublish() const
 {
-    return _onPublishSig.connect(std::move(slot));
+    return _onPublishSig;
 }
 
-sigc::connection
-MockMqttClient::onMessage(OnMessageSignal::slot_type&& slot)
+MockMqttClient::OnMessageSignal
+MockMqttClient::onMessage() const
 {
-    return _onMessageSig.connect(std::move(slot));
+    return _onMessageSig;
 }
 
-sigc::connection
-MockMqttClient::onLog(OnLogSignal::slot_type&& slot)
+MockMqttClient::OnLogSignal
+MockMqttClient::onLog() const
 {
-    return _onLogSig.connect(std::move(slot));
+    return _onLogSig;
 }
 
 } // namespace jar

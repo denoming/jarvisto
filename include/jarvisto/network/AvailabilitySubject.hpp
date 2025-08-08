@@ -15,8 +15,8 @@ public:
     [[nodiscard]] AvailabilityState
     state() const override;
 
-    [[maybe_unused]] sigc::connection
-    onStateUpdate(OnStateUpdateSignal::slot_type&& slot) override;
+    [[nodiscard]] OnStateUpdateSignal
+    onStateUpdate() const override;
 
 protected:
     void

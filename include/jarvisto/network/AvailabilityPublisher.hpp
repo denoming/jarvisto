@@ -2,7 +2,7 @@
 
 #include "jarvisto/network/Export.hpp"
 #include "jarvisto/network/Types.hpp"
-#include "jarvisto/network/MqttClient.hpp"
+#include "jarvisto/network/IMqttClient.hpp"
 #include "jarvisto/network/IAvailabilitySubject.hpp"
 
 #include <sigc++/trackable.h>
@@ -14,7 +14,7 @@ namespace jar {
 class JARVISTO_NETWORK_EXPORT AvailabilityPublisher : public sigc::trackable {
 public:
     explicit AvailabilityPublisher(std::string name,
-                                   MqttClient& client,
+                                   IMqttClient& client,
                                    IAvailabilitySubject& subject);
 
 private:
@@ -27,7 +27,7 @@ private:
 
 private:
     std::string _name;
-    MqttClient& _client;
+    IMqttClient& _client;
     AvailabilityState _state{AvailabilityState::Offline};
 };
 

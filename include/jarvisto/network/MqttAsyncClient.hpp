@@ -1,7 +1,7 @@
 #pragma once
 
 #include "jarvisto/network/Mqtt.hpp"
-#include "jarvisto/network/MqttBasicClient.hpp"
+#include "jarvisto/network/MqttClient.hpp"
 #include "jarvisto/network/Asio.hpp"
 
 #include <sigc++/adaptors/track_obj.h>
@@ -78,7 +78,6 @@ public:
     /* Signatures */
     using OnMessage = void(int mid, std::string_view topic, void* payload, size_t size);
     using OnLog = void(int logLevel, std::string_view message);
-
     /* Signals */
     using OnMessageSignal = sigc::signal<OnMessage>;
     using OnLogSignal = sigc::signal<OnLog>;
@@ -90,26 +89,26 @@ public:
         : _client{id, cleanSession, getLogs}
         , _executor{std::move(executor)}
     {
-        std::ignore = _client.onConnect(
+        std::ignore = _client.onConnect().connect(
             sigc::track_obj(std::bind_front(&MqttAsyncClient::onConnect, this), this));
-        std::ignore = _client.onDisconnect(
+        std::ignore = _client.onDisconnect().connect(
             sigc::track_obj(std::bind_front(&MqttAsyncClient::onDisconnect, this), this));
-        std::ignore = _client.onSubscribe(
+        std::ignore = _client.onSubscribe().connect(
             sigc::track_obj(std::bind_front(&MqttAsyncClient::onSubscribe, this), this));
-        std::ignore = _client.onUnsubscribe(
+        std::ignore = _client.onUnsubscribe().connect(
             sigc::track_obj(std::bind_front(&MqttAsyncClient::onUnsubscribe, this), this));
-        std::ignore = _client.onPublish(
+        std::ignore = _client.onPublish().connect(
             sigc::track_obj(std::bind_front(&MqttAsyncClient::onPublish, this), this));
     }
 
     [[nodiscard]] bool
-    hasConnection()
+    hasConnection() const
     {
         return _client.hasConnection();
     }
 
     [[nodiscard]] std::error_code
-    credentials(std::string_view user, std::string_view password)
+    credentials(const std::string_view user, const std::string_view password) const
     {
         return _client.credentials(user, password);
     }
@@ -260,16 +259,16 @@ public:
                        std::forward<CompletionToken>(token));
     }
 
-    [[maybe_unused]] sigc::connection
-    onMessage(OnMessageSignal::slot_type&& slot)
+    [[maybe_unused]] OnMessageSignal
+    onMessage() const
     {
-        return _client.onMessage(std::move(slot));
+        return _client.onMessage();
     }
 
-    [[maybe_unused]] sigc::connection
-    onLog(OnLogSignal::slot_type&& slot)
+    [[maybe_unused]] OnLogSignal
+    onLog() const
     {
-        return _client.onLog(std::move(slot));
+        return _client.onLog();
     }
 
 private:
@@ -277,10 +276,10 @@ private:
 
     template<typename HandlerT, typename... Args>
     void
-    callHandler(HandlerId id, Args&&... args)
+    callHandler(const HandlerId id, Args&&... args)
     {
         std::unique_lock lock{_guard};
-        if (auto hit = _handlers.find(id); hit != std::end(_handlers)) {
+        if (const auto hit = _handlers.find(id); hit != std::end(_handlers)) {
             detail::MqttHandler::Ptr handler{std::move(std::get<detail::MqttHandler::Ptr>(*hit))};
             std::ignore = _handlers.erase(hit);
             lock.unlock();
@@ -290,7 +289,7 @@ private:
 
     template<typename HandlerT>
     void
-    pushHandler(HandlerId id, io::any_io_executor executor, auto&& handler)
+    pushHandler(const HandlerId id, io::any_io_executor executor, auto&& handler)
     {
         std::lock_guard lock{_guard};
         assert(not _handlers.contains(id));
@@ -301,41 +300,41 @@ private:
     }
 
     void
-    onConnect(MqttReturnCode rc)
+    onConnect(const MqttReturnCode rc)
     {
         callHandler<detail::MqttConnDiscHandler>(kConnHandlerId, MqttErrorCode::Success, rc);
     }
 
     void
-    onDisconnect(MqttReturnCode rc)
+    onDisconnect(const MqttReturnCode rc)
     {
         callHandler<detail::MqttConnDiscHandler>(kDiscHandlerId, MqttErrorCode::Success, rc);
     }
 
     void
-    onSubscribe(int mid)
+    onSubscribe(const int mid)
     {
         callHandler<detail::MqttCompletionHandler>(mid, MqttErrorCode::Success);
     }
 
     void
-    onUnsubscribe(int mid)
+    onUnsubscribe(const int mid)
     {
         callHandler<detail::MqttCompletionHandler>(mid, MqttErrorCode::Success);
     }
 
     void
-    onPublish(int mid)
+    onPublish(const int mid)
     {
         callHandler<detail::MqttCompletionHandler>(mid, MqttErrorCode::Success);
     }
 
 private:
-    inline static const HandlerId kConnHandlerId{std::numeric_limits<HandlerId>::min() + 1};
-    inline static const HandlerId kDiscHandlerId{std::numeric_limits<HandlerId>::min() + 2};
+    static constexpr HandlerId kConnHandlerId{std::numeric_limits<HandlerId>::min() + 1};
+    static constexpr HandlerId kDiscHandlerId{std::numeric_limits<HandlerId>::min() + 2};
 
     io::any_io_executor _executor;
-    MqttBasicClient _client;
+    MqttClient _client;
 
     mutable std::mutex _guard;
     std::map<HandlerId, detail::MqttHandler::Ptr> _handlers;

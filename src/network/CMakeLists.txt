@@ -28,7 +28,6 @@ target_sources(jarvisto-network
             src/HttpRequest.cpp
             src/Mqtt.cpp
             src/MqttClient.cpp
-            src/MqttBasicClient.cpp
             src/AvailabilityObserver.cpp
             src/AvailabilityPublisher.cpp
             src/AvailabilitySubject.cpp

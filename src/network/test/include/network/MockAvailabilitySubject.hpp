@@ -13,8 +13,8 @@ public:
     void
     triggerStateUpdate(const std::string& name, AvailabilityState state);
 
-    sigc::connection
-    onStateUpdate(OnStateUpdateSignal::slot_type&& slot) override;
+    OnStateUpdateSignal
+    onStateUpdate() const override;
 
 public:
     MOCK_METHOD(const std::string&, name, (), (const, override));

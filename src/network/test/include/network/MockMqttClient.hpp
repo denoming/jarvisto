@@ -1,101 +1,101 @@
 #pragma once
 
-#include "jarvisto/network/MqttClient.hpp"
+#include "jarvisto/network/IMqttClient.hpp"
 
 #include <gmock/gmock.h>
 
 namespace jar {
 
-class MockMqttClient : public MqttClient {
+class MockMqttClient : public IMqttClient {
 public:
     MockMqttClient();
 
     void
-    triggerConnect(MqttReturnCode returnCode);
+    triggerConnect(MqttReturnCode returnCode) const;
 
     void
-    triggerDisconnect(MqttReturnCode returnCode);
+    triggerDisconnect(MqttReturnCode returnCode) const;
 
     void
-    triggerSubscribe(int mid);
+    triggerSubscribe(int mid) const;
 
     void
-    triggerUnsubscribe(int mid);
+    triggerUnsubscribe(int mid) const;
 
     void
-    triggerPublish(int mid);
+    triggerPublish(int mid) const;
 
     void
-    triggerMessage(int mid, std::string_view topic, void* payload, size_t size);
+    triggerMessage(int mid, std::string_view topic, void* payload, size_t size) const;
 
     void
-    triggerLog(int logLevel, std::string_view message);
+    triggerLog(int logLevel, std::string_view message) const;
 
-    sigc::connection
-    onConnect(OnConnectSignal::slot_type&& slot) override;
+    OnConnectSignal
+    onConnect() const override;
 
-    sigc::connection
-    onDisconnect(OnDisconnectSignal::slot_type&& slot) override;
+    OnDisconnectSignal
+    onDisconnect() const override;
 
-    sigc::connection
-    onSubscribe(OnSubscribeSignal::slot_type&& slot) override;
+    OnSubscribeSignal
+    onSubscribe() const override;
 
-    sigc::connection
-    onUnsubscribe(OnUnsubscribeSignal::slot_type&& slot) override;
+    OnUnsubscribeSignal
+    onUnsubscribe() const override;
 
-    sigc::connection
-    onPublish(OnPublishSignal::slot_type&& slot) override;
+    OnPublishSignal
+    onPublish() const override;
 
-    sigc::connection
-    onMessage(OnMessageSignal::slot_type&& slot) override;
+    OnMessageSignal
+    onMessage() const override;
 
-    sigc::connection
-    onLog(OnLogSignal::slot_type&& slot) override;
+    OnLogSignal
+    onLog() const override;
 
 public:
-    MOCK_METHOD(bool, doHasConnection, (), (override));
+    MOCK_METHOD(bool, hasConnection, (), (override, const));
 
     MOCK_METHOD(std::error_code,
-                doCredentials,
+                credentials,
                 (std::string_view user, std::string_view password),
-                (override));
+                (override, const));
 
     MOCK_METHOD(std::error_code,
-                doConnect,
-                (std::string_view host, uint16_t port, int keepAlive),
-                (override));
+                connect,
+                (std::string_view host, int port, int keepAlive),
+                (override, const));
 
     MOCK_METHOD(std::error_code,
-                doConnectAsync,
-                (std::string_view host, uint16_t port, int keepAlive),
-                (override));
+                connectAsync,
+                (std::string_view host, int port, int keepAlive),
+                (override, const));
 
-    MOCK_METHOD(std::error_code, doReconnect, (), (override));
+    MOCK_METHOD(std::error_code, reconnect, (), (override, const));
 
-    MOCK_METHOD(std::error_code, doReconnectAsync, (), (override));
+    MOCK_METHOD(std::error_code, reconnectAsync, (), (override, const));
 
-    MOCK_METHOD(std::error_code, doDisconnect, (), (override));
+    MOCK_METHOD(std::error_code, disconnect, (), (override, const));
 
     MOCK_METHOD((std::expected<int, std::error_code>),
-                doSubscribe,
+                subscribe,
                 (std::string_view topic, MqttQoS qos),
-                (override));
+                (override, const));
 
     MOCK_METHOD((std::expected<int, std::error_code>),
-                doUnsubscribe,
+                unsubscribe,
                 (std::string_view topic),
-                (override));
+                (override, const));
 
     MOCK_METHOD(
         (std::expected<int, std::error_code>),
-        doPublish,
+        publish,
         (std::string_view topic, const void* payload, std::size_t size, MqttQoS qos, bool retain),
-        (override));
+        (override, const));
 
     MOCK_METHOD((std::expected<int, std::error_code>),
-                doPublish,
+                publish,
                 (std::string_view topic, std::string_view payload, MqttQoS qos, bool retain),
-                (override));
+                (override, const));
 
 private:
     OnConnectSignal _onConnectSig;

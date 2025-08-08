@@ -10,7 +10,9 @@ namespace jar {
 
 class IAvailabilitySubject {
 public:
+    /* Signatures */
     using OnStateUpdate = void(const std::string& name, AvailabilityState state);
+    /* Signals */
     using OnStateUpdateSignal = sigc::signal<OnStateUpdate>;
 
     virtual ~IAvailabilitySubject() = default;
@@ -23,8 +25,8 @@ public:
     state() const
         = 0;
 
-    [[maybe_unused]] virtual sigc::connection
-    onStateUpdate(OnStateUpdateSignal::slot_type&& slot)
+    [[nodiscard]] virtual OnStateUpdateSignal
+    onStateUpdate() const
         = 0;
 };
 

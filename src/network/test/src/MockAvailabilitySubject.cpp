@@ -19,10 +19,10 @@ MockAvailabilitySubject::triggerStateUpdate(const std::string& name, Availabilit
     _onStateUpdateSig(name, state);
 }
 
-sigc::connection
-MockAvailabilitySubject::onStateUpdate(OnStateUpdateSignal::slot_type&& slot)
+MockAvailabilitySubject::OnStateUpdateSignal
+MockAvailabilitySubject::onStateUpdate() const
 {
-    return _onStateUpdateSig.connect(std::move(slot));
+    return _onStateUpdateSig;
 }
 
 } // namespace jar

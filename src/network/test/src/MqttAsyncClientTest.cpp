@@ -54,7 +54,7 @@ TEST_F(MqttAsyncClientTest, DISABLED_Publishing)
     EXPECT_CALL(callback, Call(Not(0), Eq(kTopic), Not(IsNull()), Gt(0)));
 
     Waiter<MqttAsyncClient::OnMessage> waiter;
-    client.onMessage(
+    std::ignore = client.onMessage().connect(
         waiter.enroll([&callback](int mid, std::string_view topic, void* payload, size_t size) {
             if (topic == kTopic) {
                 callback.Call(mid, topic, payload, size);

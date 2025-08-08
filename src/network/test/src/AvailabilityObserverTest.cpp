@@ -35,7 +35,7 @@ TEST(AvailabilityObserverTest, AddSubjects)
 
     MockFunction<AvailabilitySubject::OnStateUpdate> callback;
     EXPECT_CALL(callback, Call(Not(IsEmpty()), AvailabilityState::Offline));
-    auto c1 = o1.onStateUpdate(callback.AsStdFunction());
+    auto c1 = o1.onStateUpdate().connect(callback.AsStdFunction());
     s1.availability(AvailabilityState::Offline);
     EXPECT_EQ(o1.state(), AvailabilityState::Offline);
     c1.disconnect();

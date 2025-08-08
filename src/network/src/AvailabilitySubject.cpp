@@ -19,10 +19,10 @@ AvailabilitySubject::state() const
     return _state;
 }
 
-sigc::connection
-AvailabilitySubject::onStateUpdate(OnStateUpdateSignal::slot_type&& slot)
+AvailabilitySubject::OnStateUpdateSignal
+AvailabilitySubject::onStateUpdate() const
 {
-    return _signal.connect(std::move(slot));
+    return _signal;
 }
 
 void

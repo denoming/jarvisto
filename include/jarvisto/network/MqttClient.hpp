@@ -1,147 +1,79 @@
 #pragma once
 
-#include "jarvisto/network/Mqtt.hpp"
+#include "jarvisto/network/IMqttClient.hpp"
 #include "jarvisto/network/Export.hpp"
 
-#include <sigc++/signal.h>
-
-#include <expected>
-#include <string_view>
+#include <memory>
 
 namespace jar {
 
-class JARVISTO_NETWORK_EXPORT MqttClient {
+class JARVISTO_NETWORK_EXPORT MqttClient final : public IMqttClient {
 public:
-    /* Signatures */
-    using OnConnect = void(MqttReturnCode returnCode);
-    using OnDisconnect = void(MqttReturnCode returnCode);
-    using OnSubscribe = void(int mid);
-    using OnUnsubscribe = void(int mid);
-    using OnPublish = void(int mid);
-    using OnMessage = void(int mid, std::string_view topic, void* payload, size_t size);
-    using OnLog = void(int logLevel, std::string_view message);
+    explicit MqttClient(const char* id = nullptr, bool cleanSession = true, bool logging = false);
 
-    /* Signals */
-    using OnConnectSignal = sigc::signal<OnConnect>;
-    using OnDisconnectSignal = sigc::signal<OnDisconnect>;
-    using OnSubscribeSignal = sigc::signal<OnSubscribe>;
-    using OnUnsubscribeSignal = sigc::signal<OnUnsubscribe>;
-    using OnPublishSignal = sigc::signal<OnPublish>;
-    using OnMessageSignal = sigc::signal<OnMessage>;
-    using OnLogSignal = sigc::signal<OnLog>;
-
-    virtual ~MqttClient() = default;
+    ~MqttClient() override;
 
     [[nodiscard]] bool
-    hasConnection();
+    hasConnection() const override;
 
     [[nodiscard]] std::error_code
-    credentials(std::string_view user, std::string_view password);
+    credentials(std::string_view user, std::string_view password) const override;
 
     [[nodiscard]] std::error_code
-    connect(std::string_view host, uint16_t port = 1883, int keepAlive = 60);
+    connect(std::string_view host, int port, int keepAlive) const override;
 
     [[nodiscard]] std::error_code
-    connectAsync(std::string_view host, uint16_t port = 1883, int keepAlive = 60);
+    connectAsync(std::string_view host, int port, int keepAlive) const override;
 
     [[nodiscard]] std::error_code
-    reconnect();
+    reconnect() const override;
 
     [[nodiscard]] std::error_code
-    reconnectAsync();
+    reconnectAsync() const override;
 
     [[nodiscard]] std::error_code
-    disconnect();
+    disconnect() const override;
 
     [[nodiscard]] std::expected<int, std::error_code>
-    subscribe(std::string_view topic, MqttQoS qos = MqttQoS::Level2);
+    subscribe(std::string_view topic, MqttQoS qos) const override;
 
     [[nodiscard]] std::expected<int, std::error_code>
-    unsubscribe(std::string_view topic);
+    unsubscribe(std::string_view topic) const override;
 
     [[nodiscard]] std::expected<int, std::error_code>
-    publish(std::string_view topic,
-            const void* payload,
-            std::size_t size,
-            MqttQoS qos = MqttQoS::Level2,
-            bool retain = false);
+    publish(std::string_view topic, const void* payload, std::size_t size, MqttQoS qos, bool retain)
+        const override;
 
     [[nodiscard]] std::expected<int, std::error_code>
     publish(std::string_view topic,
             std::string_view payload,
-            MqttQoS qos = MqttQoS::Level2,
-            bool retain = false);
+            MqttQoS qos,
+            bool retain) const override;
 
-    [[maybe_unused]] virtual sigc::connection
-    onConnect(OnConnectSignal::slot_type&& slot)
-        = 0;
+    [[nodiscard]] OnConnectSignal
+    onConnect() const override;
 
-    [[maybe_unused]] virtual sigc::connection
-    onDisconnect(OnDisconnectSignal::slot_type&& slot)
-        = 0;
+    [[nodiscard]] OnDisconnectSignal
+    onDisconnect() const override;
 
-    [[maybe_unused]] virtual sigc::connection
-    onSubscribe(OnSubscribeSignal::slot_type&& slot)
-        = 0;
+    [[nodiscard]] OnSubscribeSignal
+    onSubscribe() const override;
 
-    [[maybe_unused]] virtual sigc::connection
-    onUnsubscribe(OnUnsubscribeSignal::slot_type&& slot)
-        = 0;
+    [[nodiscard]] OnUnsubscribeSignal
+    onUnsubscribe() const override;
 
-    [[maybe_unused]] virtual sigc::connection
-    onPublish(OnPublishSignal::slot_type&& slot)
-        = 0;
+    [[nodiscard]] OnPublishSignal
+    onPublish() const override;
 
-    [[maybe_unused]] virtual sigc::connection
-    onMessage(OnMessageSignal::slot_type&& slot)
-        = 0;
+    [[nodiscard]] OnMessageSignal
+    onMessage() const override;
 
-    [[maybe_unused]] virtual sigc::connection
-    onLog(OnLogSignal::slot_type&& slot)
-        = 0;
+    [[nodiscard]] OnLogSignal
+    onLog() const override;
 
-protected:
-    virtual bool
-    doHasConnection()
-        = 0;
-
-    virtual std::error_code
-    doCredentials(std::string_view user, std::string_view password)
-        = 0;
-
-    virtual std::error_code
-    doConnect(std::string_view host, uint16_t port, int keepAlive)
-        = 0;
-
-    virtual std::error_code
-    doConnectAsync(std::string_view host, uint16_t port, int keepAlive)
-        = 0;
-
-    virtual std::error_code
-    doReconnect()
-        = 0;
-
-    virtual std::error_code
-    doReconnectAsync()
-        = 0;
-
-    virtual std::error_code
-    doDisconnect()
-        = 0;
-
-    virtual std::expected<int, std::error_code>
-    doSubscribe(std::string_view topic, MqttQoS qos) = 0;
-
-    virtual std::expected<int, std::error_code>
-    doUnsubscribe(std::string_view topic) = 0;
-
-    virtual std::expected<int, std::error_code>
-    doPublish(
-        std::string_view topic, const void* payload, std::size_t size, MqttQoS qos, bool retain)
-        = 0;
-
-    virtual std::expected<int, std::error_code>
-    doPublish(std::string_view topic, std::string_view payload, MqttQoS qos, bool retain) = 0;
+private:
+    class Impl;
+    std::unique_ptr<Impl> _impl;
 };
 
 } // namespace jar

@@ -14,7 +14,7 @@ AvailabilityObserver::add(AvailabilitySubject& subject)
 {
     const auto [entry, ok] = _states.insert({subject.name(), subject.state()});
 
-    subject.onStateUpdate(sigc::track_obj(
+    std::ignore = subject.onStateUpdate().connect(sigc::track_obj(
         [entry, this](const std::string& name, const AvailabilityState state) {
             std::get<AvailabilityState>(*entry) = state;
             if (state == AvailabilityState::Online) {
