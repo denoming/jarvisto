@@ -1,1 +1,1 @@
-find_package(OpenSSL REQUIRED)
+find_package(OpenSSL REQUIRED MODULE)
