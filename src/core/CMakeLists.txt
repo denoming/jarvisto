@@ -70,11 +70,9 @@ install(EXPORT JarvistoCoreTargets
     FILE JarvistoCoreTargets.cmake
 )
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
     TYPE INCLUDE
     COMPONENT Jarvisto_DevLib
-    FILES_MATCHING
-    PATTERN core/*.hpp
 )
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jarvisto/core/Export.hpp

@@ -73,11 +73,9 @@ install(EXPORT JarvistoNetworkTargets
     FILE JarvistoNetworkTargets.cmake
 )
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
     TYPE INCLUDE
     COMPONENT Jarvisto_DevLib
-    FILES_MATCHING
-    PATTERN network/*.hpp
 )
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jarvisto/network/Export.hpp

@@ -10,7 +10,7 @@
 namespace jar {
 
 AvailabilityPublisher::AvailabilityPublisher(std::string name,
-                                             IMqttClient& client,
+                                             MqttClient& client,
                                              IAvailabilitySubject& subject)
     : _name{std::move(name)}
     , _client{client}
@@ -32,11 +32,7 @@ void
 AvailabilityPublisher::publish()
 {
     static const std::string kPublishTopic = fmt::format("{}/state", _name);
-    if (auto rv = _client.publish(kPublishTopic,
-                                  fmt::to_string(_state),
-                                  IMqttClient::kDefaultQos,
-                                  IMqttClient::kDefaultRetain);
-        not rv) {
+    if (auto rv = _client.publish(kPublishTopic, fmt::to_string(_state)); not rv) {
         LOGE("Unable to publish <{}> state: {}", _state, rv.error().message());
     }
 }

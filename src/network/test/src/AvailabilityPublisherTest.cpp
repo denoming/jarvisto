@@ -16,22 +16,22 @@ public:
 
 TEST_F(AvailabilityPublisherTest, CheckStateUpdating)
 {
-    EXPECT_CALL(client, hasConnection).WillOnce(Return(false));
+    EXPECT_CALL(client, doHasConnection).WillOnce(Return(false));
     EXPECT_CALL(subject, state).WillOnce(Return(AvailabilityState::Offline));
 
     AvailabilityPublisher publisher{"service", client, subject};
 
-    EXPECT_CALL(client, hasConnection).WillOnce(Return(true)).RetiresOnSaturation();
-    EXPECT_CALL(client, publish(_, HasSubstr("Online"), _, _)).RetiresOnSaturation();
+    EXPECT_CALL(client, doHasConnection).WillOnce(Return(true)).RetiresOnSaturation();
+    EXPECT_CALL(client, doPublish(_, HasSubstr("Online"), _, _)).RetiresOnSaturation();
     subject.triggerStateUpdate("subject", AvailabilityState::Online);
 
-    EXPECT_CALL(client, hasConnection).WillOnce(Return(true)).RetiresOnSaturation();
-    EXPECT_CALL(client, publish(_, HasSubstr("Offline"), _, _)).RetiresOnSaturation();
+    EXPECT_CALL(client, doHasConnection).WillOnce(Return(true)).RetiresOnSaturation();
+    EXPECT_CALL(client, doPublish(_, HasSubstr("Offline"), _, _)).RetiresOnSaturation();
     subject.triggerStateUpdate("subject", AvailabilityState::Offline);
 
-    EXPECT_CALL(client, hasConnection).WillOnce(Return(false)).RetiresOnSaturation();
+    EXPECT_CALL(client, doHasConnection).WillOnce(Return(false)).RetiresOnSaturation();
     subject.triggerStateUpdate("subject", AvailabilityState::Online);
 
-    EXPECT_CALL(client, publish(_, HasSubstr("Online"), _, _)).RetiresOnSaturation();
-    client.triggerConnect(MqttReturnCode::Accepted);
+    EXPECT_CALL(client, doPublish(_, HasSubstr("Online"), _, _)).RetiresOnSaturation();
+    client.notifyConnect(MqttReturnCode::Accepted);
 }
