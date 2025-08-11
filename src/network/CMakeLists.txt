@@ -34,7 +34,7 @@ target_sources(jarvisto-network
 )
 
 target_include_directories(jarvisto-core
-    PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE $<BUILD_INTERFACE:${CMAKE_RUNTIME_OUTPUT_DIRECTORY}>
             $<BUILD_INTERFACE:${MOSQUITTO_INCLUDE_DIRS}>

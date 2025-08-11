@@ -29,7 +29,7 @@ target_sources(jarvisto-core
 )
 
 target_include_directories(jarvisto-core
-    PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PRIVATE $<BUILD_INTERFACE:${CMAKE_RUNTIME_OUTPUT_DIRECTORY}>
 )
