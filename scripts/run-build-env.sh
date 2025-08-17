@@ -2,25 +2,38 @@
 
 set -e
 
-PROJECT_ROOT=$(dirname "$(dirname "$(realpath -s $0)")")
+push_image=false
+platform_arch="arm64"
+platform_variant="v8"
 
-# Handle arguments
-PLATFORM_ARCH="${1:-arm64}"
-PLATFORM_VARIANT="${2:-v8}"
-USER_NAME="${3:-$(whoami)}"
+while getopts "pa:v:" flag; do
+  case "$flag" in
+    p)
+      push_image=true
+      ;;
+    a)
+      platform_arch="$OPTARG"
+      ;;
+    v)
+      platform_variant="$OPTARG"
+      ;;
+    ?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
 
-# Define variables
-USER_UID="$(id ${USER_NAME} -u)"
-USER_GID="$(id ${USER_NAME} -g)"
-PLATFORM="${PLATFORM_ARCH}${PLATFORM_VARIANT}"
-IMAGE_NAME="my/jarvisto:${PLATFORM_ARCH}${PLATFORM_VARIANT}"
+dir_root="$(dirname "$(dirname "$(realpath -s $0)")")"
+username="$(whoami)"
+user_uid="$(id -u)"
+user_gid="$(id -g)"
+platform="${platform_arch}${platform_variant}"
+image="denoming/jarvisto:${platform_arch}${platform_variant}"
 
 echo "=============================="
-echo "        Platform: ${PLATFORM}"
-echo "           Image: ${IMAGE_NAME}"
-echo "        Username: ${USER_NAME}"
-echo "         User ID: ${USER_UID}"
-echo "        Group ID: ${USER_GID}"
+echo "        Platform: ${platform}"
+echo "           Image: ${image}"
 echo "=============================="
 
 command -v docker > /dev/null
@@ -31,40 +44,57 @@ if [ $? != 0 ]; then
 fi
 
 build_image() {
-  BUILD_CMD=(docker build \
-  --platform "linux/${PLATFORM_ARCH}/${PLATFORM_VARIANT}" \
-  --tag "${IMAGE_NAME}" \
-  --build-arg "PLATFORM=${PLATFORM}" \
-  --build-arg "USER_NAME=${USER_NAME}" \
-  --build-arg "USER_UID=${USER_UID}" \
-  --build-arg "USER_GID=${USER_GID}" \
-  --file "${PROJECT_ROOT}/Dockerfile"
-  "${PROJECT_ROOT}")
+  CMD=(docker build \
+  --platform "linux/${platform_arch}/${platform_variant}" \
+  --tag "${image}" \
+  --build-arg "BASE_CONTAINER=debian:bookworm" \
+  --build-arg "USERNAME=${username}" \
+  --build-arg "USER_UID=${user_uid}" \
+  --build-arg "USER_GID=${user_gid}" \
+  --file "${dir_root}/Dockerfile"
+  "${dir_root}")
 
-  if [ -z "$(docker images -q ${IMAGE_NAME})" ]; then
-    echo -e "Building <${IMAGE_NAME}> image"
-    echo "${BUILD_CMD[@]}"
-    "${BUILD_CMD[@]}"
+  if [ -z "$(docker images -q ${image})" ]; then
+    echo -e "Building <${image}> image"
+    echo "${CMD[@]}"
+    "${CMD[@]}"
   fi
 }
 
 run_image() {
-  RUN_CMD=(docker run -it \
-  --platform "linux/${PLATFORM_ARCH}/${PLATFORM_VARIANT}" \
+  CMD=(docker run -it \
+  --platform "linux/${platform_arch}/${platform_variant}" \
   --rm \
-  --user "${USER_UID}:${USER_GID}" \
+  --user "${user_uid}:${user_gid}" \
   --volume "${HOME}/.ssh:${HOME}/.ssh" \
-  --volume "${PROJECT_ROOT}:${PROJECT_ROOT}" \
+  --volume "${dir_root}:${dir_root}" \
   --network "host" \
-  --workdir "${PROJECT_ROOT}" \
-  "${IMAGE_NAME}")
+  --workdir "${dir_root}" \
+  "${image}")
 
-  if [ -n "$(docker images -q ${IMAGE_NAME})" ]; then
-    "${RUN_CMD[@]}"
+  if [ -n "$(docker images -q ${image})" ]; then
+    echo -e "Running <${image}> image"
+    echo "${CMD[@]}"
+    "${CMD[@]}"
   else
-    echo "Docker image <${IMAGE_NAME}> is absent"
+    echo "Docker image <${image}> is absent"
+  fi
+}
+
+push_image() {
+  CMD=(docker image push ${image})
+  if [ -n "$(docker images -q ${image})" ]; then
+    echo -e "Pushing <${image}> image"
+    echo "${CMD[@]}"
+    "${CMD[@]}"
+  else
+    echo "Docker image <${image}> is absent"
   fi
 }
 
 build_image
-run_image
+if [ "$push_image" == "true" ]; then
+  push_image
+else
+  run_image
+fi

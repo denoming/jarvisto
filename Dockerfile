@@ -1,13 +1,11 @@
 # syntax=docker/dockerfile:1
 
-ARG PLATFORM=arm64v8
-FROM $PLATFORM/debian:bookworm
+ARG BASE_CONTAINER=debian:bookworm
+FROM $BASE_CONTAINER
 
-ARG USER_NAME=bender
+ARG USERNAME=bender
 ARG USER_UID=1000
 ARG USER_GID=1000
-
-USER root
 
 RUN apt update \
  && apt install -y build-essential autoconf automake autopoint sudo vim git \
@@ -18,12 +16,7 @@ RUN apt update \
                    libspdlog-dev libhowardhinnant-date-dev libsigc++-3.0-dev \
                    libgtest-dev libgmock-dev nlohmann-json3-dev
 
-# Create custom user
-RUN groupadd -f -g $USER_GID $USER_NAME \
- && useradd -l -g $USER_GID -G sudo --uid $USER_UID -ms /bin/bash $USER_NAME \
- && echo $USER_NAME:$USER_NAME | chpasswd \
- && echo $USER_NAME 'ALL=(ALL) NOPASSWD:SETENV: ALL' > /etc/sudoers.d/010_$USER_NAME || true
-
-USER $USER_NAME
-
-CMD ["/bin/bash","--rcfile","$HOME/.profile"]
+RUN groupadd -f -g $USER_GID $USERNAME \
+ && useradd -l -g $USER_GID -G sudo --uid $USER_UID -ms /bin/bash $USERNAME \
+ && echo $USERNAME:$USERNAME | chpasswd \
+ && echo $USERNAME 'ALL=(ALL) NOPASSWD:SETENV: ALL' > /etc/sudoers.d/010_$USERNAME || true

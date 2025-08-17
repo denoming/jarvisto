@@ -1,0 +1,59 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    branches: [ "main" ]
+
+env:
+  CMAKE_PRESET: debug-docker
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker - Set up Docker
+        uses: docker/setup-docker-action@v4
+        with:
+          daemon-config: |
+            {
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
+      - name: Docker - Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker - Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Docker - Build and push
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: denoming/jarvisto:latest
+          build-args: >
+            BASE_CONTAINER=debian:bookworm
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  build-project:
+    needs: [build-image]
+    runs-on: ubuntu-latest
+    container: denoming/jarvisto:latest
+    steps:
+      - name: Project - Checkout
+        uses: actions/checkout@v4
+      - name: Project - Configure
+        run: >
+          cmake --preset ${{ env.CMAKE_PRESET }}
+      - name: Project - Build
+        run: >
+          cmake --build --preset ${{ env.CMAKE_PRESET }} --parallel
+      - name: Project - Package
+        run: >
+          cpack --preset ${{ env.CMAKE_PRESET }}
