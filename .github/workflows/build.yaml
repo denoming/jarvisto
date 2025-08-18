@@ -57,3 +57,12 @@ jobs:
       - name: Project - Package
         run: >
           cpack --preset ${{ env.CMAKE_PRESET }}
+      - name: Project - Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: |
+            build-debug-docker/*.deb
+            build-debug-docker/*.ddeb
+          compression-level: 0
+
