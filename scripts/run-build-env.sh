@@ -2,12 +2,16 @@
 
 set -e
 
+build_image=false
 push_image=false
 platform_arch="arm64"
 platform_variant="v8"
 
-while getopts "pa:v:" flag; do
+while getopts "bpa:v:" flag; do
   case "$flag" in
+    b)
+      build_image=true
+      ;;
     p)
       push_image=true
       ;;
@@ -25,16 +29,9 @@ while getopts "pa:v:" flag; do
 done
 
 dir_root="$(dirname "$(dirname "$(realpath -s $0)")")"
-username="$(whoami)"
 user_uid="$(id -u)"
 user_gid="$(id -g)"
-platform="${platform_arch}${platform_variant}"
-image="denoming/jarvisto:${platform_arch}${platform_variant}"
-
-echo "=============================="
-echo "        Platform: ${platform}"
-echo "           Image: ${image}"
-echo "=============================="
+image="denoming/jarvisto:latest"
 
 command -v docker > /dev/null
 if [ $? != 0 ]; then
@@ -45,10 +42,10 @@ fi
 
 build_image() {
   CMD=(docker build \
-  --platform "linux/${platform_arch}/${platform_variant}" \
+  --platform "linux/amd64,linux/arm64" \
   --tag "${image}" \
   --build-arg "BASE_CONTAINER=debian:bookworm" \
-  --build-arg "USERNAME=${username}" \
+  --build-arg "USERNAME=bender" \
   --build-arg "USER_UID=${user_uid}" \
   --build-arg "USER_GID=${user_gid}" \
   --file "${dir_root}/Dockerfile"
@@ -62,6 +59,11 @@ build_image() {
 }
 
 run_image() {
+  if ! [ -n "$(docker images -q ${image})" ]; then
+    echo "Pull <${image}> docker image"
+    docker pull ${image}
+  fi
+
   CMD=(docker run -it \
   --platform "linux/${platform_arch}/${platform_variant}" \
   --rm \
@@ -72,13 +74,9 @@ run_image() {
   --workdir "${dir_root}" \
   "${image}")
 
-  if [ -n "$(docker images -q ${image})" ]; then
-    echo -e "Running <${image}> image"
-    echo "${CMD[@]}"
-    "${CMD[@]}"
-  else
-    echo "Docker image <${image}> is absent"
-  fi
+  echo -e "Running <${image}> image"
+  echo "${CMD[@]}"
+  "${CMD[@]}"
 }
 
 push_image() {
@@ -92,9 +90,10 @@ push_image() {
   fi
 }
 
-build_image
+if [ "$build_image" == "true" ]; then
+  build_image
+fi
 if [ "$push_image" == "true" ]; then
   push_image
-else
-  run_image
 fi
+run_image
