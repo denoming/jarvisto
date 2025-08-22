@@ -44,8 +44,8 @@ target_link_libraries(jarvisto-network
     PUBLIC Jarvisto::Core
            Boost::url
            PkgConfig::SigCpp
-           OpenSSL::SSL
-           OpenSSL::Crypto
+           PkgConfig::OpenSSL
+           PkgConfig::OpenCrypto
     PRIVATE PkgConfig::Mosquitto
 )
 
