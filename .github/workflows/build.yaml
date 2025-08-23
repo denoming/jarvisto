@@ -9,7 +9,7 @@ on:
     branches: [ "main" ]
 
 env:
-  CMAKE_PRESET: debug-docker
+  CMAKE_PRESET: release-docker
 
 jobs:
   build-image:
@@ -38,31 +38,62 @@ jobs:
           push: true
           tags: denoming/jarvisto:latest
           build-args: >
-            BASE_CONTAINER=debian:bookworm
+            BASE_CONTAINER=python:3.12-bookworm
           cache-from: type=gha
           cache-to: type=gha,mode=max
-  build-project:
+
+  build-project-amd64:
     needs: [build-image]
     runs-on: ubuntu-latest
-    container: denoming/jarvisto:latest
+    container:
+      image: denoming/jarvisto:latest
+      options: --platform linux/amd64
     steps:
       - name: Project - Checkout
         uses: actions/checkout@v4
-      - name: Project - Configure
-        run: >
-          cmake --preset ${{ env.CMAKE_PRESET }}
       - name: Project - Build
         run: >
-          cmake --build --preset ${{ env.CMAKE_PRESET }} --parallel
-      - name: Project - Package
-        run: >
-          cpack --preset ${{ env.CMAKE_PRESET }}
+          cmake --workflow --preset ${{ env.CMAKE_PRESET }}
       - name: Project - Archive
         uses: actions/upload-artifact@v4
         with:
-          name: packages
+          name: artifacts-amd64
           path: |
-            build-debug-docker/*.deb
-            build-debug-docker/*.ddeb
+            build-release-docker/*.deb
+            build-release-docker/*.ddeb
           compression-level: 0
 
+  build-project-arm64:
+    needs: [build-image]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Env - Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Env - Set up Docker
+        uses: docker/setup-docker-action@v4
+        with:
+          daemon-config: |
+            {
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
+      - name: Project - Checkout
+        uses: actions/checkout@v4
+      - name: Project - Build
+        run: >
+          docker run
+          --rm
+          --platform linux/arm64
+          --volume "$(pwd):$(pwd)"
+          --workdir "$(pwd)"
+          denoming/jarvisto:latest
+          cmake --workflow --preset ${{ env.CMAKE_PRESET }}
+      - name: Project - Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-arm64
+          path: |
+            build-release-docker/*.deb
+            build-release-docker/*.ddeb
+          compression-level: 0

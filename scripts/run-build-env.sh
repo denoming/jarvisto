@@ -4,10 +4,9 @@ set -e
 
 build_image=false
 push_image=false
-platform_arch="arm64"
-platform_variant="v8"
+platform="arm64"
 
-while getopts "bpa:v:" flag; do
+while getopts "bpe:" flag; do
   case "$flag" in
     b)
       build_image=true
@@ -15,13 +14,10 @@ while getopts "bpa:v:" flag; do
     p)
       push_image=true
       ;;
-    a)
-      platform_arch="$OPTARG"
+    e)
+      platform="$OPTARG"
       ;;
-    v)
-      platform_variant="$OPTARG"
-      ;;
-    ?)
+    \?)
       echo "Invalid option: -$OPTARG" >&2
       exit 1
       ;;
@@ -44,7 +40,7 @@ build_image() {
   CMD=(docker build \
   --platform "linux/amd64,linux/arm64" \
   --tag "${image}" \
-  --build-arg "BASE_CONTAINER=debian:bookworm" \
+  --build-arg "BASE_CONTAINER=python:3.12-bookworm" \
   --build-arg "USERNAME=bender" \
   --build-arg "USER_UID=${user_uid}" \
   --build-arg "USER_GID=${user_gid}" \
@@ -65,14 +61,14 @@ run_image() {
   fi
 
   CMD=(docker run -it \
-  --platform "linux/${platform_arch}/${platform_variant}" \
+  --platform "${platform}" \
   --rm \
   --user "${user_uid}:${user_gid}" \
   --volume "${HOME}/.ssh:${HOME}/.ssh" \
   --volume "${dir_root}:${dir_root}" \
   --network "host" \
   --workdir "${dir_root}" \
-  "${image}")
+  "${image}" /bin/bash)
 
   echo -e "Running <${image}> image"
   echo "${CMD[@]}"

@@ -123,5 +123,79 @@
       "inherits": ["unit-tests"],
       "configurePreset": "debug-docker"
     }
-  ]
+  ],
+  "workflowPresets": [
+    {
+      "name": "debug",
+      "displayName": "Debug workflow",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "debug"
+        },
+        {
+          "type": "build",
+          "name": "debug"
+        },
+        {
+          "type": "package",
+          "name": "debug"
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "displayName": "Release workflow",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "release"
+        },
+        {
+          "type": "build",
+          "name": "release"
+        },
+        {
+          "type": "package",
+          "name": "release"
+        }
+      ]
+    },
+    {
+      "name": "debug-docker",
+      "displayName": "Debug workflow [Docker]",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "debug-docker"
+        },
+        {
+          "type": "build",
+          "name": "debug-docker"
+        },
+        {
+          "type": "package",
+          "name": "debug-docker"
+        }
+      ]
+    },
+    {
+      "name": "release-docker",
+      "displayName": "Release workflow [Docker]",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "release-docker"
+        },
+        {
+          "type": "build",
+          "name": "release-docker"
+        },
+        {
+          "type": "package",
+          "name": "release-docker"
+        }
+      ]
+    }
+  ]  
 }

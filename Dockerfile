@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG BASE_CONTAINER=debian:bookworm
+ARG BASE_CONTAINER=python:3.12-bookworm
 FROM $BASE_CONTAINER
 
 ARG USERNAME=bender
