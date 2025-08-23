@@ -1,5 +1,7 @@
 # Jarvisto
 
+[![CI](https://github.com/denoming/jarvisto/actions/workflows/build.yaml/badge.svg)](https://github.com/denoming/jarvisto/actions/workflows/build.yaml)
+
 ## Introduction
 
 Basic building blocks library.
