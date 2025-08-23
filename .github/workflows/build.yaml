@@ -15,6 +15,11 @@ jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
+      - name: Docker - Set platforms
+        id: vars
+        run: |
+          [ "${{ contains(github.event.head_commit.message, '[run arm64]') }}" == "true" ] && PLATFORMS=linux/amd64,linux/arm64 || PLATFORMS=linux/amd64
+          echo "platforms=$PLATFORMS" >> $GITHUB_OUTPUT
       - name: Docker - Set up Docker
         uses: docker/setup-docker-action@v4
         with:
@@ -34,7 +39,7 @@ jobs:
       - name: Docker - Build and push
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ steps.vars.outputs.platforms }}
           push: true
           tags: denoming/jarvisto:latest
           build-args: >
@@ -64,6 +69,7 @@ jobs:
           compression-level: 0
 
   build-project-arm64:
+    if: contains(github.event.head_commit.message, '[run arm64]')
     needs: [build-image]
     runs-on: ubuntu-latest
     steps:
