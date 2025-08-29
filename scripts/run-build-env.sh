@@ -1,15 +1,29 @@
 #!/usr/bin/env bash
 
+# Copyright 2025 Denys Asauliak
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 set -e
 
-build_image=false
+make_image=false
 push_image=false
 platform="arm64"
 
-while getopts "bpe:" flag; do
+while getopts "mpe:" flag; do
   case "$flag" in
-    b)
-      build_image=true
+    m)
+      make_image=true
       ;;
     p)
       push_image=true
@@ -24,7 +38,7 @@ while getopts "bpe:" flag; do
   esac
 done
 
-dir_root="$(dirname "$(dirname "$(realpath -s $0)")")"
+root_dir="$(dirname "$(dirname "$(realpath -s $0)")")"
 user_uid="$(id -u)"
 user_gid="$(id -g)"
 image="denoming/jarvisto:latest"
@@ -36,7 +50,7 @@ if [ $? != 0 ]; then
     exit 1
 fi
 
-build_image() {
+make_image() {
   CMD=(docker build \
   --platform "linux/amd64,linux/arm64" \
   --tag "${image}" \
@@ -44,8 +58,8 @@ build_image() {
   --build-arg "USERNAME=bender" \
   --build-arg "USER_UID=${user_uid}" \
   --build-arg "USER_GID=${user_gid}" \
-  --file "${dir_root}/Dockerfile"
-  "${dir_root}")
+  --file "${root_dir}/Dockerfile"
+  "${root_dir}")
 
   if [ -z "$(docker images -q ${image})" ]; then
     echo -e "Building <${image}> image"
@@ -65,9 +79,9 @@ run_image() {
   --rm \
   --user "${user_uid}:${user_gid}" \
   --volume "${HOME}/.ssh:${HOME}/.ssh" \
-  --volume "${dir_root}:${dir_root}" \
+  --volume "${root_dir}:${root_dir}" \
   --network "host" \
-  --workdir "${dir_root}" \
+  --workdir "${root_dir}" \
   "${image}" /bin/bash)
 
   echo -e "Running <${image}> image"
@@ -86,8 +100,8 @@ push_image() {
   fi
 }
 
-if [ "$build_image" == "true" ]; then
-  build_image
+if [ "$make_image" == "true" ]; then
+  make_image
 fi
 if [ "$push_image" == "true" ]; then
   push_image
