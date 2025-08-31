@@ -14,6 +14,11 @@
 
 include(FeatureSummary)
 
+option(ENABLE_CODE_FORMAT "Enable code formatting" ON)
+add_feature_info(
+    ENABLE_CODE_FORMAT ENABLE_CODE_FORMAT "Enable code formatting support"
+)
+
 option(ENABLE_NETWORK_COMPONENT "Enable network component" OFF)
 if(ENABLE_NETWORK_COMPONENT)
     list(APPEND VCPKG_MANIFEST_FEATURES "network")

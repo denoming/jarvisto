@@ -28,7 +28,7 @@ RUN apt update \
                    python3 libmosquitto-dev libmosquittopp-dev libssl-dev \
                    libboost1.81-dev libboost-url1.81-dev libsystemd-dev \
                    libspdlog-dev libhowardhinnant-date-dev libsigc++-3.0-dev \
-                   libgtest-dev libgmock-dev nlohmann-json3-dev
+                   libgtest-dev libgmock-dev nlohmann-json3-dev clang-format-16
 
 RUN groupadd -f -g $USER_GID $USERNAME \
  && useradd -l -g $USER_GID -G sudo --uid $USER_UID -ms /bin/bash $USERNAME \
