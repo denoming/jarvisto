@@ -41,11 +41,9 @@ struct JARVISTO_CORE_EXPORT Timestamp {
     operator<=>(const Timestamp& other) const
         = default;
 
-    explicit
-    operator int64_t() const;
+    explicit operator int64_t() const;
 
-    explicit
-    operator date::utc_seconds() const;
+    explicit operator date::utc_seconds() const;
 
     static Timestamp
     zero();

@@ -61,8 +61,7 @@ public:
     [[nodiscard]] std::optional<T>
     pick(const std::string& key) const;
 
-    [[nodiscard]]
-    bool
+    [[nodiscard]] bool
     has(const std::string& key) const;
 
 private:

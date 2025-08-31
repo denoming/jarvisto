@@ -73,7 +73,7 @@ private:
     std::condition_variable _condition;
 };
 
-} // namespace details
+} // namespace detail
 
 template<typename F>
 class Waiter;
