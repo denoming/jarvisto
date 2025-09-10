@@ -1,7 +1,7 @@
 {
   "name": "jarvisto",
   "version-semver": "0.3.11",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "maintainers": [
     "Denys Asauliak <denoming@gmail.com>"
   ],
