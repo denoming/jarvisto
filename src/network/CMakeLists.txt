@@ -59,8 +59,8 @@ target_link_libraries(jarvisto-network
            PkgConfig::SigCpp
            PkgConfig::OpenSSL
            PkgConfig::OpenCrypto
-    PRIVATE PkgConfig::Mosquitto
-            ada-url::ada-url
+    PRIVATE ada-url::ada-url
+            ${MOSQUITTO_LIBRARIES}
 )
 
 target_compile_features(jarvisto-network PUBLIC cxx_std_23)

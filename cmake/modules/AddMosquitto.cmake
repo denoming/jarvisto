@@ -12,6 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-find_package(PkgConfig)
-
-pkg_check_modules(Mosquitto REQUIRED IMPORTED_TARGET libmosquitto)
+# Try to find CMake target (vcpkg)
+find_package(unofficial-mosquitto QUIET CONFIG)
+if(TARGET unofficial::mosquitto::mosquitto)
+    set(MOSQUITTO_LIBRARIES unofficial::mosquitto::mosquitto)
+else()
+    # Try to find system wide library using pkg-config
+    find_package(PkgConfig)
+    pkg_check_modules(Mosquitto IMPORTED_TARGET libmosquitto)
+    if(NOT DEFINED Mosquitto_FOUND)
+        message(FATAL_ERROR "Unable to find mosquitto dependency")
+    endif()
+    set(MOSQUITTO_LIBRARIES PkgConfig::Mosquitto)
+endif()
