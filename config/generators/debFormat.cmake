@@ -29,12 +29,12 @@ endif()
 
 # Set package dependencies
 string(CONCAT CPACK_DEBIAN_JARVISTO_LIB_PACKAGE_DEPENDS
-    "libspdlog-dev (>= 1.10.0),"
-    "libhowardhinnant-date-dev (>= 3.0.1),"
-    "libsigc++-3.0-dev (>= 3.4.0),"
+    "libspdlog1.10 (>= 1.10.0),"
+    "libfmt9 (>= 9.1.0),"
+    "libdate-tz3 (>= 3.0.1),"
+    "libsigc++-3.0-0 (>= 3.4.0),"
     "libmosquitto1 (>= 2.0.11),"
-    "libmosquittopp1 (>= 2.0.11),"
-    "libssl3 (>= 3.0.15)"
+    "libssl3 (>= 3.0.17)"
 )
 
 # Development package configuration
