@@ -20,6 +20,7 @@
 #include "jarvisto/network/Worker.hpp"
 
 #include <thread>
+#include <string_view>
 
 using namespace jar;
 using namespace testing;
@@ -28,7 +29,7 @@ using namespace std::literals;
 
 class HttpRequestTest : public Test {
 public:
-    const urls::url kUrl{
+    const std::string_view kUrl{
         "https://api.waqi.info/feed/A252832/?token=e971e6bb50fff16c97de289eb50cb69952413a04"};
 
     HttpRequestTest()

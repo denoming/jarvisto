@@ -15,6 +15,7 @@
 #include "jarvisto/network/HttpRequest.hpp"
 
 #include "jarvisto/core/Logger.hpp"
+#include "ada.h"
 
 namespace jar {
 
@@ -38,13 +39,13 @@ HttpRequest::pending() const
 }
 
 HttpRequest::ResultType
-HttpRequest::GET(const urls::url& url, const http::fields& fields)
+HttpRequest::GET(std::string_view url, const http::fields& fields)
 {
     return doGET(url, fields, makeResultSetter<std::string>());
 }
 
 HttpRequest::ResultType
-HttpRequest::GET(const urls::url& url,
+HttpRequest::GET(std::string_view url,
                  std::move_only_function<OnReady> onReady,
                  std::move_only_function<OnError> onError,
                  const http::fields& fields)
@@ -54,27 +55,28 @@ HttpRequest::GET(const urls::url& url,
 }
 
 HttpRequest::ResultType
-HttpRequest::doGET(const urls::url& url, const http::fields& fields, SetterType&& setter)
+HttpRequest::doGET(std::string_view url, const http::fields& fields, SetterType&& setter)
 {
-    assert(!url.empty());
-
     _setter = std::move(setter);
 
+    const auto result = ada::parse(url);
+    assert(result);
+
     std::error_code error;
-    setServerHostname(_stream, url.host(), error);
+    setServerHostname(_stream, result->get_host(), error);
     if (error) {
         LOGW("Unable to set server to use in verification process");
         error = {};
     }
-    setSniHostname(_stream, url.host(), error);
+    setSniHostname(_stream, result->get_host(), error);
     if (error) {
         LOGW("Unable to set SNI hostname");
     }
 
     _req.version(kHttpVersion11);
     _req.method(http::verb::get);
-    _req.target(url.encoded_resource());
-    _req.set(http::field::host, url.encoded_host());
+    _req.target(result->get_pathname());
+    _req.set(http::field::host, result->get_host());
     _req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
     /* Set all custom fields to HTTP request */
@@ -82,7 +84,7 @@ HttpRequest::doGET(const urls::url& url, const http::fields& fields, SetterType&
         _req.set(f.name_string(), f.value());
     });
 
-    resolve(url.encoded_host(), url.has_port() ? url.port() : "https");
+    resolve(result->get_host(), result->has_port() ? result->get_port() : "https");
 
     return _setter.getResult();
 }

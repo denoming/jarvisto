@@ -43,10 +43,10 @@ public:
     pending() const;
 
     [[nodiscard]] ResultType
-    GET(const urls::url& url, const http::fields& fields = {});
+    GET(std::string_view url, const http::fields& fields = {});
 
     [[maybe_unused]] ResultType
-    GET(const urls::url& url,
+    GET(std::string_view url,
         std::move_only_function<OnReady> onReady,
         std::move_only_function<OnError> onError,
         const http::fields& fields = {});
@@ -55,7 +55,7 @@ private:
     HttpRequest(io::any_io_executor executor, ssl::context& context);
 
     [[nodiscard]] ResultType
-    doGET(const urls::url& url, const http::fields& fields, SetterType&& setter);
+    doGET(std::string_view url, const http::fields& fields, SetterType&& setter);
 
     void
     resolve(std::string_view host, std::string_view port);

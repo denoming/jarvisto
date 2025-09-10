@@ -30,7 +30,6 @@ endif()
 # Set package dependencies
 string(CONCAT CPACK_DEBIAN_JARVISTO_LIB_PACKAGE_DEPENDS
     "libspdlog-dev (>= 1.10.0),"
-    "libboost-url1.81-dev (>= 1.81.0),"
     "libhowardhinnant-date-dev (>= 3.0.1),"
     "libsigc++-3.0-dev (>= 3.4.0),"
     "libmosquitto1 (>= 2.0.11),"

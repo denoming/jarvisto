@@ -56,11 +56,11 @@ target_include_directories(jarvisto-core
 
 target_link_libraries(jarvisto-network
     PUBLIC Jarvisto::Core
-           Boost::url
            PkgConfig::SigCpp
            PkgConfig::OpenSSL
            PkgConfig::OpenCrypto
     PRIVATE PkgConfig::Mosquitto
+            ada-url::ada-url
 )
 
 target_compile_features(jarvisto-network PUBLIC cxx_std_23)
