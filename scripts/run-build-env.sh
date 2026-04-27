@@ -18,7 +18,7 @@ set -e
 
 make_image=false
 push_image=false
-platform="arm64"
+platform="amd64"
 
 while getopts "mpe:" flag; do
   case "$flag" in
@@ -54,7 +54,7 @@ make_image() {
   CMD=(docker build \
   --platform "linux/amd64,linux/arm64" \
   --tag "${image}" \
-  --build-arg "BASE_CONTAINER=python:3.12-bookworm" \
+  --build-arg "BASE_CONTAINER=debian:trixie" \
   --build-arg "USERNAME=bender" \
   --build-arg "USER_UID=${user_uid}" \
   --build-arg "USER_GID=${user_gid}" \
