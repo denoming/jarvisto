@@ -43,7 +43,7 @@ jobs:
           push: true
           tags: denoming/jarvisto:latest
           build-args: >
-            BASE_CONTAINER=python:3.12-bookworm
+            BASE_CONTAINER=debian:trixie
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
